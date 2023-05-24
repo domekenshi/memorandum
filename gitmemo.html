@@ -1,0 +1,12 @@
+<!-- ローカルで作成したプロジェクトをgithubに上げる方法 -->
+git init // プロジェクトの初期化（初回のみ）
+git remote add origin <リポジトリのURL> // リモートリポジトリの設定
+git add .  // 変更内容をステージに追加
+git commit -m "コミットメッセージ"  // コミットの作成
+git push origin <ブランチ名>  // リモートリポジトリにプッシュ
+
+<!-- その他　git remoteコマンド -->
+git remote add <名前> <リポジトリのURL>: リポジトリをリモートリポジトリに追加します。
+git remote remove <名前>: 指定した名前のリモートリポジトリを削除します。
+git remote rename <古い名前> <新しい名前>: リモートリポジトリの名前を変更します。
+git remote -vまたはgit remote --verbose: 設定されているすべてのリモートリポジトリとそのURLを表示します。
