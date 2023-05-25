@@ -5,8 +5,108 @@ git add .  // 変更内容をステージに追加
 git commit -m "コミットメッセージ"  // コミットの作成
 git push origin <ブランチ名>  // リモートリポジトリにプッシュ
 
-<!-- その他　git remoteコマンド -->
-git remote add <名前> <リポジトリのURL>: リポジトリをリモートリポジトリに追加します。
-git remote remove <名前>: 指定した名前のリモートリポジトリを削除します。
-git remote rename <古い名前> <新しい名前>: リモートリポジトリの名前を変更します。
-git remote -vまたはgit remote --verbose: 設定されているすべてのリモートリポジトリとそのURLを表示します。
+git fetch <リモート名><ブランチ名>
+↓
+git fetch origin master
+git merge origin/master
+または
+git pull
+のみ
+
+<!-- リモートから情報をとってくる -->
+git fetch <リモート名>{ブランチ名}
+そのあとmergeする
+<!-- ファイルへの変更取消 -->
+git checkout --<ファイル名>
+
+<!-- ステージへの変更取消 -->
+git reset HEAD<ファイル名>
+
+<!-- 直前のコミットやり直し -->
+git commit --amend
+※プッシュしたものはやりなおさない
+
+git checkout --. 全変更を取り消す
+--をつけているのはファイル名とブランチ名が被った時にどちらをさしているのか
+Gitがわからなくなるのを避けるため
+
+<!-- git branch -->
+git branch <ブランチ名>         追加
+切り替えは行われない。
+git branch                      一覧表示
+git branch --a                  全てのブランチ
+git checkout <ブランチ名>              切り替え
+git checkout -b <ブランチ名>     追加して切り替え
+git branch -m                   自作業ブランチの名前変更
+git branch -d                   削除
+
+<!-- リベース -->
+git rebase <ブランチ名>         ブランチの起点となるコミットを別のコミットに移動する
+
+<!-- マージ -->
+git merge origin master
+
+
+<!-- git push originについて -->
+git push <リモート名> <ブランチ名>
+<!-- エイリアスについて -->
+git config --global alias.ci commit
+commitをciという略語で使えるようになる。
+git config --global     ユーザー全体
+git config              リポジトリ事に設定
+
+<!-- githubのプロジェクトをコピーする -->
+git remote add origin <githubURL>
+
+<!-- 確認系 -->
+git commit -v   コミットメッセージに変更内容の差分を表示する
+git status      変更されたファイルの確認
+git diff
+git diff <ファイル名> addする前の変更文
+git diff --staged addした後の変更分
+git log     変更履歴の確認
+git log --oneline 一行で
+git log -p <ファイル名>     ファイルの変更差分を表示
+git log -n <コミット数>     表示するコミット数を制限する
+git remote show <リモート名> 
+git remote show origin      詳細情報→fetchとpushのURL。リモートブランチ。git pull git pushの挙動
+
+
+
+
+<!-- 削除 -->
+git rm <ファイル名>　ファイルごと
+git rm -r <ディレクトリ名>
+git rm --cached <ファイル名> ファイル残したいとき（ワークツリーに残る）
+
+<!-- 移動 -->
+git mv <旧ファイル> <新>
+
+            <!-- その他　git remoteコマンド -->
+            git remote add <名前> <リポジトリのURL>: リポジトリをリモートリポジトリに追加します。
+            git remote remove <名前>: 指定した名前のリモートリポジトリを削除します。
+            git remote rename <古い名前> <新しい名前>: リモートリポジトリの名前を変更します。
+            git remote -vまたはgit remote --verbose: 設定されているすべてのリモートリポジトリとそのURLを表示します。
+            git remote show <リモート名> 
+            git remote show origin      詳細情報→fetchとpushのURL。リモートブランチ。git pull git pushの挙動
+            git remote rename 1 2
+            git remote rm 1 2
+
+            <!-- その他　git addコマンド -->
+            git add <ファイル名>
+            git add <フォルダ名>
+
+
+
+その他（現状は使用する機会がないためこういうこともできるんだとう羅列のみ）
+プルをリベース型に設定
+複数コミットのやり直し
+コミットの並び替え削除
+コミットをまとめる
+コミットを分割
+タグづけ
+タグ作成（軽量版あり）
+タグデータの表示
+タグの送信
+stash（一時退避）
+
