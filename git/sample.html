@@ -1,0 +1,45 @@
+*******************************
+よく使うもののみ
+*******************************
+★最初だけ
+git init
+
+★メイン
+git status
+状況確認(
+    ファイルの変更を行う。
+)
+git status
+
+変更履歴の確認
+git log --oneline
+git log -p <ファイル名>
+git log --oneline -n 3
+
+変更差分の確認     git diff
+                  git diff HEAD
+
+問題なければ追加    git add
+
+ここのリモートリポジトリに登録するよ
+git remote add githubURL
+
+git git push origin master
+
+★間違った場合
+ファイルも一緒に削除
+git rm 
+ディレクトリも
+git rm -r
+ファイルは残す
+git rm -cached (gitignoreに登録する)
+でファイル削除とgitの管理からも除外。
+間違ってコミットしたときなど
+
+
+
+Git公式ドキュメント
+https://git-scm.com/book/ja/v2
+
+gitチュートリアル
+https://www.atlassian.com/ja/git/tutorials

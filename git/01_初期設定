@@ -1,0 +1,15 @@
+---------------------------------------
+ggithubのユーザー登録(初期設定)を行う。
+---------------------------------------
+git config --global user.name "名前"
+git config --global user.email アドレス
+
+＜補足めも＞
+・よく使うコマンド
+cd
+ls
+mkdir
+rm
+cp
+mv
+
