@@ -10,8 +10,8 @@
 
 ■大まかな流れ
 １ git add
-2 git commit 
-3 git push
+２ git commit 
+３ git push
 
 ★コミットは基本一つ一つ
 まとめるならわかりやすく
