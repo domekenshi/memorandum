@@ -1,0 +1,55 @@
+■インストール
+１Docker　HubからDocker Desktopをインストール
+
+２exe実行
+■VScodeでの起動
+３
+ｗｓｌ２がインストールされているか確認
+https://docs.docker.com/desktop/windows/wsl/
+
+・バージョン確認
+wsl.exe -l -v
+
+  NAME                   STATE           VERSION
+* docker-desktop         Running         2
+  docker-desktop-data    Running         2
+  Ubuntu                 Running         2
+
+・もしバージョン２でなければ
+wsl.exe --set-version (distro name) 2
+・設定
+wsl.exe --set-default-version 2
+
+・Docker Desktopの[設定] > [リソース] > [WSL 統合]で
+デフォルトの WSL ディストリビューションで有効になっていることを確認
+なっていなかったら
+wsl --set-default ubuntu
+で設定可能
+
+・power shell開いて
+wsl
+と入力
+VScodeの拡張機能で「wsl」をインストール
+code
+で立ち上がれば成功
+
+
+■エラーが出る場合
+
+WARNING: Ignoring https://dl-cdn.alpinelinux.org/alpine/v3.16/main: No such file or directory
+[2023-05-30 14:50:12.026] WARNING: Ignoring https://dl-cdn.alpinelinux.org/alpine/v3.16/community: No such file or directory
+[2023-05-30 14:50:12.026] libstdc++ is required to run the VSCode Server:
+[2023-05-30 14:50:12.026] Please open an Alpine shell and run 'apk update && apk add libstdc++'
+[2023-05-30 14:50:12.026] VS Code Server for WSL closed unexpectedly.
+
+こんなエラーが出た場合、ターミナル（シェル）で
+apk update && apk add libstdc++
+と入力。
+
+再度codeで確認
+
+・補足
+原因はパッケージ(libstdc++)が見つからない。
+libstdc++はC++の標準ライブラリであり、VSCode ServerがC++コードを処理するために必要。
+Alpineシェルは、Alpine Linuxディストリビューションに特有のシェル環境です。Alpine Linux自体は軽量でセキュアなLinuxディストリビューションであり、シンプルなパッケージ管理システムを提供
+
