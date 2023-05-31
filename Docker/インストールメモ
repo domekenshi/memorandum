@@ -53,3 +53,37 @@ apk update && apk add libstdc++
 libstdc++はC++の標準ライブラリであり、VSCode ServerがC++コードを処理するために必要。
 Alpineシェルは、Alpine Linuxディストリビューションに特有のシェル環境です。Alpine Linux自体は軽量でセキュアなLinuxディストリビューションであり、シンプルなパッケージ管理システムを提供
 
+Replace YOUR-USERNAME with your Docker ID.
+docker tag docker/welcome-to-docker YOUR-USERNAME/welcome-to-docker
+*********************************
+基本コマンド
+*********************************
+バージョン確認
+docker --version
+一覧表示
+docker ps -a
+docker start <コンテナID or コンテナ名>
+docker stop <コンテナID or コンテナ名>
+docker rm <コンテナID or コンテナ名>
+
+
+
+
+*********************************
+laravelインストール
+*********************************
+dockerを起動する
+net start docker
+で起動しない場合サービス名が異なることがある
+
+windowsの検索窓からサービスで検索
+サービス名を確認
+net start <サービス名>
+入れ替えて起動する
+
+net start "Docker Desktop Service"
+
+できない場合
+sudo systemctl start "Docker Desktop Service"
+
+curl -s https://laravel.build/myblog | bash
