@@ -3,6 +3,7 @@ ggithubのユーザー登録(初期設定)を行う。
 ---------------------------------------
 git config --global user.name "名前"
 git config --global user.email アドレス
+git config --global core.editor "atom --wait"
 
 ＜補足めも＞
 ・よく使うコマンド
@@ -13,3 +14,9 @@ rm
 cp
 mv
 
+確認
+git config --global user.name
+git config --global user.email
+git config --global core.editor
+git config --ls
+cat `/.gitconfig

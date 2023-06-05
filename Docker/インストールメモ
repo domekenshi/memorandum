@@ -66,7 +66,31 @@ docker start <コンテナID or コンテナ名>
 docker stop <コンテナID or コンテナ名>
 docker rm <コンテナID or コンテナ名>
 
+*********************************
+dockerファイル
+*********************************
+主にインフラエンジニアが作成
+通常はdocker hubなどから欲しいの探す
 
+
+
+*********************************
+イメージについて
+*********************************
+以下のURLから自分の欲しいイメージをさがし作成する
+https://hub.docker.com/
+自分のPCのイメージ一覧
+docker images
+一番最初だけ
+docker run 名前
+
+
+docker run --name イメージ名　-e 〇〇　-d mysql:tag
+
+-e 環境変数（コンテナの）
+-d デタッチモード　→バックグラウンドで実行
+mysql:tag イメージの設定　; バージョン（どっかーはぶから）
+-p　ポートファディング　ローカルから内部のものを操作
 
 
 *********************************
@@ -87,3 +111,20 @@ net start "Docker Desktop Service"
 sudo systemctl start "Docker Desktop Service"
 
 curl -s https://laravel.build/myblog | bash
+
+
+*********************************
+お試しプロジェクト作成メモ
+*********************************
+VScodeで
+docker -v
+docker Compose version -v
+
+フォルダを作成
+code（dockerの）でひらく
+dockerのサーバー設定ファイルをプロジェクト直下に配置
+
+以下プロジェクト内のターミナルでサーバー起動コマンド
+docker-compose up -d
+サーバーストップ
+docker-compose stop
