@@ -97,6 +97,26 @@ git mv <旧ファイル> <新>
             git add <フォルダ名>
 
 
+取消
+git checkout --
+git reset HEAD .
+直前のコミットをやりなおす
+git commit --amend リモートリポジトリにプッシュしたコミットはやり直したらダメ
+
+
+★リモートリポジトリは複数登録可
+git remote add リモート名　URL
+
+リモートから情報取得
+git fetch origin
+git branch -a
+git merge
+いっきに
+git pull origin master
+git pull
+
+git log --oneline --decorate
+
 
 その他（現状は使用する機会がないためこういうこともできるんだとう羅列のみ）
 プルをリベース型に設定

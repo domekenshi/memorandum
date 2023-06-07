@@ -1,0 +1,5 @@
+エイリアスをつける
+
+git config --global alias.ci commit
+など
+git ciとかでいける
