@@ -1,3 +1,7 @@
+とりあえずコマンドわからなくなったら
+docker -help
+docker ○○　-help
+
 ■インストール
 １Docker　HubからDocker Desktopをインストール
 
