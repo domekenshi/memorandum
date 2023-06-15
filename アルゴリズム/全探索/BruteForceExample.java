@@ -1,7 +1,7 @@
 package アルゴリズム.全探索;
 
 /**
- * ブルートフォース（全探索）の例
+ * ブルートフォース（全探索）
  */
 public class BruteForceExample {
 
