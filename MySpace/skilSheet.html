@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- 見出しのCSS -->
+    <style>
+        h2 {
+            padding: 0.4em 0.5em;
+            color: #494949;
+            background: #f4f4f4;
+            border-left: solid 5px #7db4e6;
+            border-bottom: solid 3px #d7d7d7;
+        }
+
+        .off {
+            padding: 15px;
+
+        }
+
+        body {
+            background-image: url(./img/04-polish-wood.png);
+
+        }
+    </style>
+</head>
+
+<body style="padding-top: 100px">
+    <!-- ヘッダーのナビバー -->
+    <header>
+        <div class="fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                <div class="container-fluid">
+                    <div class="container">
+                        <!-- <a class="text-white navbar-brand">Menu</a> -->
+                        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button> -->
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a class="text-white nav-link active" aria-current="page"
+                                        href="#profile">簡単な自己紹介 /</a></li>
+                                <li class="nav-item"><a class="text-white nav-link" href="#study">学習内容 /</a></li>
+                                <!-- <li class="nav-item"><a class="text-white nav-link" href="#other">訓練以外での学習、使用ツール</a></li> -->
+                                <li class="nav-item"><a class="text-white nav-link" href="#port">制作物 /</a></li>
+                                <li class="nav-item"><a class="text-white nav-link" href="#private">その他</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main class="container bg-light">
+        <div>
+            <div id="profile">
+                <div class="off">　　</div>
+            </div>
+            <h2 id="profile">簡単な自己紹介</h2>
+            <p class="container">
+               
+
+            </p>
+        </div>
+
+        <!-- コンパクトにしたかったのでアコーディオン -->
+        <div>
+            <div id="study">
+                <div class="off">　　</div>
+            </div>
+
+            <h2>学習内容</h2>
+            <p>（クリックすると詳細がみれます）</p>
+        </div>
+        <div class="container">
+            <div class="accordion" id="accordionExample">
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">Java</button>
+                    </h3>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>DB連携</li>
+                                <li>サーブレット・JSP</li>
+                                <li>Android Studio</li>
+                                <li>webアプリケーション</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            HTML、CSS、DB</button>
+                    </h3>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>基本タグなど</li>
+                                <li>Brackets</li>
+                                <li>MySQL</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingThree">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            ネットワーク</button>
+                    </h3>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>TCP/IP</li>
+                                <li>CISCOブリッジ実機操作</li>
+                                <li>CISCOルーター実機操作</li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingFour">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false"
+                            aria-controls="collapseFour">IOT制御</button>
+                    </h3>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">未受講</div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingFive">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFive" aria-expanded="false"
+                            aria-controls="collapseFive">Linux</button>
+                    </h3>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>サーバー構築</li>
+                                <li>CentOS</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="headingSix">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            訓練以外での学習中＆使用ツール</button>
+                    </h3>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <h6>Git</h6>
+                                <li>GitHub</li>
+                                <li>sourcetree</li>
+                                <br>
+                                <h6>フレームワーク、ライブラリ</h6>
+                                <li>Bootstrap</li>
+                                <li>spring boot2</li>
+                                <li>JavaScript(Vue,React、JQuery)</li>
+                                <li>python(Django)</li>
+                                <br>
+                                <h6>エディタ</h6>
+                                <li>VScode(メイン）</li>
+                                <li>Atom(サブ）</li>
+                                <li>CodeSandBox</li>
+                                <br>
+                                <h6>他</h6>
+                                <li>ロリポップ</li>
+                                <li>netlify</li>
+                                <li>docker</li>
+                                <li>slack</li>
+                                <li>応用情報技術者試験</li>
+                                <p>午前に関しては合格点はとれていると思います。<br>
+                                    午後は全て解答しましたがどれだけとれているかはわかりません。</p>
+                                <p>※2021/4/18受験完了</p>
+                                <br>
+                                <P style="color: crimson;">
+                                    ※フレームワークなどは必要に応じて学習学習<br> エディタなどは色々試してみたいので触ってます。
+                                </P>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="port">
+            <div class="off">　　</div>
+        </div>
+
+        <div id="private">
+            <div class="off">　　</div>
+        </div>
+        <div>
+
+        </div>
+    </main>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
