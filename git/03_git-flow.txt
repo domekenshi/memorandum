@@ -63,4 +63,3 @@ support
 A successful Git branching model
 
 https://qiita.com/homhom44/items/9f13c646fa2619ae63d0
-
