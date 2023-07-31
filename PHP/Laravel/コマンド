@@ -1,6 +1,0 @@
-■Laravelインストールコマンド（バージョン9以上）
-mac
-composer create-project laravel/laravel:^9 task_test --prefer-dist
-
-windows
-composer create-project "laravel/laravel=9.*" task_test --prefer-dist
