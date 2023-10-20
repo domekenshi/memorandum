@@ -11,5 +11,5 @@ insert into people values(1,"Taro","2001-01-01");
 
 select * from people;
 
-
+select seq from dual
 
