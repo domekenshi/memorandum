@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import WebGL from "three/addons/capabilities/WebGL.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -29,4 +30,12 @@ function animate() {
   cube.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
-animate();
+
+// WebGLの互換性チェック
+if (WebGL.isWebGLAvailable()) {
+  // Initiate function or other initializations here
+  animate();
+} else {
+  const warning = WebGL.getWebGLErrorMessage();
+  document.getElementById("container").appendChild(warning);
+}
