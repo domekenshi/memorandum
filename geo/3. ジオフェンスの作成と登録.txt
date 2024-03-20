@@ -1,0 +1,25 @@
+ジオフェンスの作成と登録は、GeofencingClientを使用して行います。以下のようにジオフェンスを設定し、登録することができます。
+
+java
+Copy code
+GeofencingClient geofencingClient = LocationServices.getGeofencingClient(this);
+Geofence geofence = new Geofence.Builder()
+    .setRequestId("some_geofence_id")
+    .setCircularRegion(
+        latitude, // 緯度
+        longitude, // 経度
+        radius // 半径（メートル）
+    )
+    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+    .build();
+
+GeofencingRequest geofencingRequest = new GeofencingRequest.Builder()
+    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+    .addGeofence(geofence)
+    .build();
+
+PendingIntent geofencePendingIntent = ... // ジオフェンスイベントを処理するためのPendingIntent
+
+geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).addOnSuccessListener(...).addOnFailureListener(...);
+4. 端末起動時にジオフェンスを作成
