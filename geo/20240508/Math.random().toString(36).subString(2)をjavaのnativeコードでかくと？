@@ -1,0 +1,32 @@
+JavaScript の Math.random().toString(36).substring(2) はランダムな数値を生成し、その数値を36進数（0-9およびa-zを使用）の文字列に変換し、最初の2文字を除去した文字列を取得します。これを Java のネイティブコードで実現するには、少し異なるアプローチが必要ですが、同様の結果を得ることができます。
+
+Java で類似の機能を実装するためには、まずランダムな double 型の数値を生成し、それを Long 型に変換してから、36進数の文字列に変換する必要があります。その後、最初の2文字を除去します。
+
+Javaでの実装例
+java
+Copy code
+{
+import java.util.Random;
+
+public class RandomStringGenerator {
+    public static String generateRandomString() {
+        Random random = new Random();
+        // 0 から 1 までのランダムな double 型の値を生成
+        double randomDouble = random.nextDouble();
+        // Long の最大値を掛けることで、ランダムな Long 型の値に変換
+        long randomLong = (long) (randomDouble * Long.MAX_VALUE);
+        // Long 型の値を36進数の文字列に変換
+        String randomStr = Long.toString(randomLong, 36);
+        // 最初の2文字を除去して返す
+        return randomStr.substring(2);
+    }
+
+    public static void main(String[] args) {
+        String randomString = generateRandomString();
+        System.out.println("Random String: " + randomString);
+    }
+}
+}
+このコードは、Random クラスを使用して 0 から 1 までのランダムな数値を生成し、それを Long.MAX_VALUE（long 型で表現可能な最大値）で乗算してランダムな long 値を得ています。その後、この数値を36進数で文字列化し、最初の2文字を削除しています。
+
+この方法で、Javaで JavaScript の Math.random().toString(36).substring(2) と非常に似た機能を実現できます。

@@ -1,0 +1,65 @@
+実装例
+java
+Copy code
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String API_URL = "https://example.com/api";
+    private final OkHttpClient client = new OkHttpClient();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        executorService.execute(() -> callApi(API_URL));
+    }
+
+    private void callApi(String url) {
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    final String responseData = response.body().string();
+                    // Process the response data here
+                    // Note: Since the processing might not be UI-related, we don't need to run it on the UI thread
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
+    }
+}
+説明
+Executorの初期化: Executors.newFixedThreadPool(4) を使用して、固定数（ここでは4）のスレッドを持つスレッドプールを作成します。これにより、複数のタスクを並行して効率的に実行できます。
+非同期タスクの実行: ExecutorService の execute メソッドを使用して、API呼び出しをバックグラウンドスレッドで実行します。
+API呼び出し: OkHttp を使用して非同期でAPIリクエストを行い、コールバックを通じてレスポンスを処理します。ここでは、UIスレッドでの処理が不要な場合、レスポンス処理を直接バックグラウンドスレッドで行うことができます。
+リソースの解放: onDestroy メソッド内で ExecutorService を shutdown することで、アクティビティが破棄される際にスレッドプールが適切に終了されます。
+この方法により、API呼び出しの非同期処理を効率的に管理でき、UIスレッドをブロックすることなく、バックグラウンドで複数のタスクを実行することが可能です。

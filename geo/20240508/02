@@ -1,0 +1,113 @@
+コードにコメント書いてくれるとうれしい
+ChatGPT
+もちろんです。以下にコメントを追加したコードを示します。このコードでは、APIリクエストを繰り返し行い、特定のキー（requestKey）を取得するまで繰り返しリクエストを送り、取得できたらそのキーを使ってさらにデータを取得する流れを実装しています。
+
+コードの実装例（コメント付き）
+java
+Copy code
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class ApiRequestLooper {
+
+    // APIのURL定義
+    private static final String API_URL = "https://example.com/api";
+    // シングルスレッドのExecutorServiceの生成
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    public static void main(String[] args) {
+        // 非同期タスクとしてAPIリクエスト処理を開始
+        executor.execute(() -> {
+            try {
+                // リクエストキーを取得
+                String requestKey = getRequestKey(API_URL);
+                if (requestKey != null) {
+                    // リクエストキーが存在すれば、そのキーでAPIデータを再度取得
+                    System.out.println("Final response with Request Key: " + fetchDataFromApi(API_URL, requestKey));
+                } else {
+                    // リクエストキーが取得できなかった場合の処理
+                    System.out.println("Request Key was not found.");
+                }
+            } finally {
+                // ExecutorServiceを終了
+                executor.shutdown();
+            }
+        });
+    }
+
+    // APIからリクエストキーを取得するメソッド
+    private static String getRequestKey(String urlString) {
+        String requestKey = null;
+
+        try {
+            // リクエストキーが見つかるまでループ
+            while (requestKey == null) {
+                HttpURLConnection connection = setupHttpConnection(new URL(urlString));
+                int responseCode = connection.getResponseCode();
+
+                // HTTPレスポンスコードが200 OKの場合のみ処理
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String response = readResponse(connection);
+                    JSONObject jsonResponse = new JSONObject(response);
+
+                    // JSONからリクエストキーを検索
+                    if (jsonResponse.has("requestKey")) {
+                        requestKey = jsonResponse.getString("requestKey");
+                        System.out.println("Request Key found: " + requestKey);
+                        break; // キーが見つかったらループを抜ける
+                    } else {
+                        System.out.println("Request Key not found, retrying in 3 seconds...");
+                        // キーが見つからない場合、3秒待って再試行
+                        TimeUnit.SECONDS.sleep(3);
+                    }
+                } else {
+                    System.out.println("HTTP Request Failed with status: " + responseCode);
+                }
+                connection.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return requestKey;
+    }
+
+    // HTTP接続の設定を行うメソッド
+    private static HttpURLConnection setupHttpConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET"); // GETメソッドで接続
+        connection.connect();
+        return connection;
+    }
+
+    // HTTPレスポンスを読み込むメソッド
+    private static String readResponse(HttpURLConnection connection) throws IOException {
+        StringBuilder response = new StringBuilder();
+        try (InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+             BufferedReader bufferedReader = new BufferedReader(streamReader)) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                response.append(line);
+            }
+        }
+        return response.toString();
+    }
+
+    // リクエストキーを用いてデータを再取得するメソッド
+    private static String fetchDataFromApi(String urlString, String requestKey) throws IOException, JSONException {
+        URL url = new URL(urlString + "?requestKey=" + requestKey);
+        HttpURLConnection connection = setupHttpConnection(url);
+        String response = "";
+        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            response = readResponse(connection);
+        }
+        connection.disconnect();
+        return response;
+    }
+}
+このコードでは、各メソッドと処理ステップに対して詳細なコメントを追加しました。これにより、処理の流れや各部の役割がより明確に理解できます。実際にこのコードを使用する場合は、APIのURLやパラメータなど、具体的な詳細を適宜調整する必要があります。
