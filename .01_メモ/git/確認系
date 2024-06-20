@@ -1,0 +1,12 @@
+<!-- 確認系 -->
+git commit -v   コミットメッセージに変更内容の差分を表示する
+git status      変更されたファイルの確認
+git diff
+git diff <ファイル名> addする前の変更文
+git diff --staged addした後の変更分
+git log     変更履歴の確認
+git log --oneline 一行で
+git log -p <ファイル名>     ファイルの変更差分を表示
+git log -n <コミット数>     表示するコミット数を制限する
+git remote show <リモート名> 
+git remote show origin      詳細情報→fetchとpushのURL。リモートブランチ。git pull git pushの挙動

@@ -1,0 +1,86 @@
+https://youtu.be/h1MDCp7blmg
+
+https://www.terraform.io/
+
+mac、linaxはtfenvごしにインストール
+
+実行時は直下のファイルのみ
+ディレクトリ階層はひとつだけにする
+
+★構文
+resource
+dataがたいはん
+
+
+
+
+resource
+resource aws_s3 test{}
+
+data
+リソース取得の文
+data aws-instance{}
+
+tfstateファイル★メイン
+管理しているインフラリソースを全て記載したJSONファイル
+
+
+----------------------------------------------------
+
+terraform init
+
+terraform validate
+
+terraform fmt
+フォーマットをととのえてくれる
+
+terraform apply
+つくる
+指定すれば部分的につくれる
+-target
+
+
+terraform plan
+コンソールで追加した場合差分が表示される
+tfファイルを編集して
+差分のない状態にするのが理想
+
+■消す
+・コメントアウト
+・terraform destroy
+
+ファイルはモジュール単位で管理できる
+変数も使える
+${}
+
+
+terraform workspace new
+terraform workspace select
+terraform workspace list
+(設定等必要)
+
+-------------------------
+サンプル
+backend.tf
+terraform{
+    required_version = "0.14.1"
+    backend "S3"{
+        profile = "terraform_"//ユーザーの指定
+        bucket = ""
+        key = "terraform_tfstate"
+        region = "ap-northeast-1"
+    }
+}
+
+provider "aws"{
+    region = "ap-northeast-1"
+}
+
+
+vpc.tf
+resource xxxx{
+    cidr_back =""
+    tags = {
+        name =""
+    }
+}

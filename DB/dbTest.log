@@ -1,8 +1,0 @@
-Statement: USE
-SQL‚ÌÀs‚É¸”s‚µ‚Ü‚µ‚½ : #42000You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'select database()
-create database suirirapoint' at line 3
-use my_db
-
-select database()
-create database suirirapoint
-
