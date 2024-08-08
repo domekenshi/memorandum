@@ -1,0 +1,9 @@
+とりあえず最初は
+！でhtml自動生成
+
+入ってるか確認
+node --version
+npm --version
+
+
+npm install -g @vue/cli
