@@ -10,3 +10,6 @@ adb devicesコマンドを使用して、エミュレータや実機が正しく
 環境変数の設定:
 ANDROID_HOMEやPATHにAndroid SDKのパスが正しく設定されているか確認してください。これが設定されていないと、エミュレータが起動しないことがあります。
 これらの手順を試しても問題が解決しない場合、idea.logやadb logcatでログを確認し、詳細なエラーメッセージをもとに問題の原因を特定することが重要です。
+
+
+adb kill-serverとadb start-server
