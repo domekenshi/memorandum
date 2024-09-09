@@ -1,0 +1,40 @@
+
+VBAを使用して1から1000までの数値を高速に入力する方法
+
+vba
+Copy code
+Sub FastNumberInput()
+    Dim startValue As Integer
+    Dim endValue As Integer
+    Dim rng As Range
+    Dim i As Integer
+    
+    startValue = 1 ' 開始値
+    endValue = 1000 ' 終了値
+    
+    Set rng = Range("A1") ' 数値を入力するセルの範囲
+    
+    Application.ScreenUpdating = False ' 画面の更新を停止（高速化のため）
+    
+    For i = startValue To endValue
+        rng.Value = i
+        Set rng = rng.Offset(1, 0) ' 次のセルに移動
+    Next i
+    
+    Application.ScreenUpdating = True ' 画面の更新を再開
+    
+    MsgBox "数値の入力が完了しました。"
+End Sub
+
+呼び出して使う版
+Sub 連番入力(ByVal endValue As Integer,ByVal address As String)
+    Dim rng As Range
+    Dim i As Integer
+    
+    Set rng = Range(address) ' 数値を入力するセルの範囲
+
+    For i = 1 To endValue
+        rng.Value = i
+        Set rng = rng.Offset(1, 0) ' 次のセルに移動
+    Next i
+End Sub

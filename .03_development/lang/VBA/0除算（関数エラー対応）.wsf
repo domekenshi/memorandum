@@ -1,0 +1,80 @@
+エラー値を返すセルがあれば、
+そのセル範囲すべてを SpecialCells メソッドで取得し
+対象が見つかった場合は、値を設定
+
+シート全体を検索
+Set Target = Cells.SpecialCells(xlCellTypeFormulas, xlErrors)
+
+一つのサブルーチンとして
+Sub DIV/0!置き換え()
+　　Dim Target As Range
+
+　　On Error Resume Next
+　　Set Target = Range("D:D").SpecialCells(xlCellTypeFormulas, xlErrors)
+　　On Error GoTo 0
+
+　　If Target Is Nothing Then Exit Sub
+
+　　Target.Value = "置き換え文字"
+
+End Sub
+
+汎用性を意識したバージョン
+Sub 関数エラー処理(ByVal range As String)
+　　Dim Target As Range
+
+　　On Error Resume Next
+　　Set Target = Range(range).SpecialCells(xlCellTypeFormulas, xlErrors)
+　　On Error GoTo 0
+
+　　If Target Is Nothing Then Exit Sub
+
+　　Target.Value = ""
+
+End Sub
+
+ループバージョン
+Sub 関数エラー処理(ByVal ws As worksheet)
+　　Dim rangeR As Integer
+　　Dim rangeC As Integer 
+    Dim i As Integer
+　　Dim j As Integer
+    Dim val As Variant
+
+    rangeR = ws.Cells(Rows.Count, 1).End(xlUp)
+    rangeC = Cells(1, Columns.Count).End(xlToLeft).Column
+
+    for i = 1 to rangeR
+        for j = 1 to rangeC
+            val = ws.Cells(i,j).value
+            if IsError(val) Then
+                if val = xlErrDiv0 Then
+                    val = 0
+                ELSE
+                    val = ""
+                END if
+            END if
+        Next
+    Next
+
+
+    '＊＊＊判定するエラー値は以下＊＊＊
+   '　#NULL!：セルの指定方法間違い
+   '　#DIV/0!：0除算
+   '　#VALUE!：不適切なデータが入力
+   '　#REF!：セルの参照エラー
+   '　#NAME?：関数名やセル範囲名などの名前間違い
+   '　#NUM!：数値が過大／過小
+   '　#N/A：値が無い
+End Sub
+
+
+定数	エラー番号	セルのエラー
+xlErrDiv0	2007	#DIV/0!
+XlErrNA	    2042	#N/A
+xlErrName	2029	#NAME?
+XlErrNull	2000	#NULL!
+XlErrNum	2036	#NUM!
+xlErrSpill	2045	#SPILL!
+XlErrRef	2023	#REF!
+XlErrValue	2015	#VALUE!
