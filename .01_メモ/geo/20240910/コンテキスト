@@ -1,0 +1,626 @@
+インテントについて小学生にもわかるように教えて
+ソース
+
+
+
+webkatu.jp favicon
+developer.amazon.com favicon
+magazine.techacademy.jp favicon
+english-contract.jp favicon
+techplay.jp favicon
+5 件をもっと見る
+回答
+インテントについて、小学生にもわかりやすく説明しましょう。
+インテントとは何か
+インテントは、人が話したり書いたりしたことの「本当の意味」や「目的」のことです。つまり、言葉の裏にある「本当に言いたいこと」を理解することです。
+日常生活での例
+例えば、お母さんが「外は寒いわね」と言ったとします。これには2つの意味が考えられます:
+単に天気の話をしている
+「上着を着ていきなさい」という意味を込めている
+インテントを理解するということは、お母さんの言葉の本当の意味を理解することです。
+コンピューターとインテント
+コンピューターやスマートフォンのアシスタント（Siriやアレクサなど）も、私たちの言葉のインテントを理解しようとします。
+例えば:
+「今日の天気は?」と聞くと、アシスタントは「天気情報が欲しい」というインテントを理解します。
+「ピザを注文したい」と言うと、「食べ物を注文する」というインテントを理解します。
+なぜインテントが大切か
+インテントを正しく理解することで、コンピューターは私たちが本当に欲しい情報や助けを提供できます。これにより、人間とコンピューターのコミュニケーションがスムーズになり、より役立つ応答を得ることができます。
+インテントを理解することは、人間同士のコミュニケーションでも大切です。相手の言葉の本当の意味を理解することで、より良い会話や関係を築くことができるのです。
+
+ozmall.co.jp
+
+amazon.co.jp
+
+kakakumag.com
+
+gorillacamp-club.com
+amazon.co.jp
+makuake.com
+honda.co.jp
+もっと見る
+インテント フィルタ
+アプリのアクティビティ、サービス、ブロードキャスト レシーバは、インテントによってアクティブ化されます。インテントは、実行するアクション（アクションの対象となるデータ、アクションを実行するコンポーネントのカテゴリ、その他の指示を含む）を記述する Intent オブジェクトによって定義されるメッセージです。
+
+アプリがシステムにインテントを発行すると、システムは、各アプリのマニフェスト ファイル内のインテント フィルタ宣言に基づいて、インテントを処理できるアプリ コンポーネントを探します。システムは、一致するコンポーネントのインスタンスを開始し、そのコンポーネントに Intent オブジェクトを渡します。複数のアプリがそのインテントを処理できる場合、ユーザーはどのアプリを使用するかを選択できます。
+
+アプリ コンポーネントには、任意の数のインテント フィルタ（<intent-filter> 要素で定義）を定義できます。各インテント フィルタにはそのコンポーネントの異なる機能を記述します。
+
+詳細については、インテントとインテント フィルタのドキュメントをご覧ください。
+
+このへんをわかりやすく教えて
+ソース
+
+
+
+developer.amazon.com favicon
+magazine.techacademy.jp favicon
+developer.android.com favicon
+mitoroid.com favicon
+android.keicode.com favicon
+5 件をもっと見る
+回答
+インテントフィルタについて、わかりやすく説明しましょう。
+インテントフィルタとは
+インテントフィルタは、アプリが特定の種類の要求や操作に対応できることを示す仕組みです。スマートフォンのアプリ開発で使われる重要な概念です。
+インテントの基本
+まず、「インテント」とは、アプリが何かをしたいという「意図」のことです。例えば:
+写真を撮りたい
+地図を見たい
+メッセージを送りたい
+これらはすべてインテントの例です。
+インテントフィルタの役割
+インテントフィルタは、アプリが「どんなインテントに対応できるか」を宣言するものです。これにより、スマートフォンのシステムは適切なアプリを選んで起動することができます。
+具体例
+カメラアプリの場合:
+「写真を撮る」インテントに対応できると宣言します。
+地図アプリの場合:
+「地図を表示する」インテントに対応できると宣言します。
+メッセージアプリの場合:
+「メッセージを送信する」インテントに対応できると宣言します。
+インテントフィルタの働き
+ユーザーが操作を行う（例：写真を撮ろうとする）
+システムがその操作に対応するインテントを生成
+システムが、そのインテントに対応できると宣言しているアプリを探す
+適切なアプリが見つかれば、そのアプリが起動される
+まとめ
+インテントフィルタは、アプリが「何ができるか」をシステムに伝える方法です。これにより、ユーザーが特定の操作をしたいときに、適切なアプリが自動的に選ばれて起動されるのです。これは、スマートフォンの使いやすさを大きく向上させる重要な仕組みです。
+
+android.keicode.com
+
+qiita.com
+
+android.suzu-sd.com
+
+nosix.hatenablog.com
+jssec.org
+jssec.org
+llcc.hatenablog.com
+もっと見る
+Context context
+ReactNativeContext
+getApplicationContext()
+MainActivityContext
+の違いを教えて
+ソース
+
+
+
+note.com favicon
+mitoroid.com favicon
+aspicjapan.org favicon
+android.keicode.com favicon
+developer.amazon.com favicon
+5 件をもっと見る
+回答
+Androidアプリ開発において、様々な種類のContextが存在します。それぞれの違いを説明しましょう。
+種類別の説明
+Context
+これは最も基本的なContextインターフェースです。アプリケーションの環境に関する情報へのアクセスを提供します。
+主な特徴:
+リソース、データベース、プリファレンスなどへのアクセスを可能にします
+アプリケーション固有の操作（Activityの起動など）を実行できます
+ApplicationContext
+アプリケーション全体のライフサイクルに紐づいたContextです。
+主な特徴:
+アプリケーションが実行されている間、常に利用可能です
+getApplicationContext()メソッドで取得できます
+アプリケーション全体で共有されるリソースやデータにアクセスするのに適しています
+ActivityContext
+特定のActivityに紐づいたContextです。
+主な特徴:
+そのActivityのライフサイクルに従います
+UIに関連する操作（レイアウトのインフレート、ダイアログの表示など）に適しています
+Activityクラス内ではthisキーワードで参照できます
+ReactNativeContext
+React Nativeアプリケーションで使用される特殊なContextです。
+主な特徴:
+React NativeのJavaScriptコードとネイティブAndroidコード間の橋渡しをします
+ネイティブモジュールの実装やイベントの発行に使用されます
+ReactContextBaseJavaModuleを継承したクラスで利用可能です
+使い分けのポイント
+長期的な保存や全体的な設定: ApplicationContextを使用
+UI関連の操作: ActivityContextを使用
+React Native特有の機能: ReactNativeContextを使用
+注意点
+ActivityContextの不適切な保持はメモリリークの原因となる可能性があります
+ApplicationContextはUI関連の操作には適していません
+ReactNativeContextは通常のAndroidアプリでは使用できません
+適切なContextの選択は、アプリケーションのパフォーマンスと安定性に大きく影響します。状況に応じて最適なContextを選択することが重要です。
+
+blog.devgenius.io
+
+reffect.co.jp
+
+note.com
+
+honmushi.com
+zenn.dev
+github.com
+engineering.mercari.com
+もっと見る
+reactnativeからジオフェンス生成要求をだすときにReactNativeContextがわたされるのですがのぞましくないですか？
+ソース
+
+
+
+developer.android.com favicon
+mitoroid.com favicon
+webkatu.jp favicon
+developer.amazon.com favicon
+aspicjapan.org favicon
+5 件をもっと見る
+回答
+ReactNativeContextをジオフェンス生成要求に直接渡すことは、確かに望ましくない実装方法です。その理由と、より適切なアプローチについて説明します。
+なぜReactNativeContextを直接渡すのが望ましくないか
+コンテキストの誤用: ReactNativeContextは特定のReact Native環境に紐づいており、ネイティブモジュールとJavaScriptのブリッジングに使用されます。ジオフェンス生成のような特定の機能にこのコンテキストを直接渡すことは、その本来の目的から外れています。
+依存関係の増加: ジオフェンス機能がReactNativeContextに直接依存すると、テストや再利用が難しくなります。
+セキュリティリスク: ReactNativeContextには多くの機能へのアクセス権があるため、必要以上の権限を与えてしまう可能性があります。
+ライフサイクルの問題: ReactNativeContextのライフサイクルとジオフェンス機能のライフサイクルが一致しない場合、予期せぬ動作やメモリリークを引き起こす可能性があります。
+望ましいアプローチ
+インターフェースの抽象化: ジオフェンス機能に必要な最小限のインターフェースを定義し、それを通じて必要な情報やコールバックを渡します。
+依存性注入: 必要な機能やコンテキストを、より制御された方法で注入します。
+ネイティブモジュールの活用: React Nativeのネイティブモジュールシステムを使用して、ジオフェンス機能をカプセル化します。
+実装例
+javascript
+// JavaScript側
+import { NativeModules } from 'react-native';
+
+const { GeofenceModule } = NativeModules;
+
+// ジオフェンス生成要求
+GeofenceModule.createGeofence(latitude, longitude, radius, (error, geofenceId) => {
+  if (error) {
+    console.error('Geofence creation failed:', error);
+  } else {
+    console.log('Geofence created with ID:', geofenceId);
+  }
+});
+
+kotlin
+// Kotlin側（ネイティブモジュール）
+class GeofenceModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+    @ReactMethod
+    fun createGeofence(latitude: Double, longitude: Double, radius: Float, promise: Promise) {
+        // ジオフェンス生成ロジック
+        // 必要に応じてApplicationContextを使用
+        val geofenceId = // ジオフェンス生成処理
+        promise.resolve(geofenceId)
+    }
+}
+
+このアプローチでは、ReactNativeContextを直接渡す代わりに、必要な情報のみをパラメータとして渡し、結果をコールバックまたはPromiseで返します。これにより、コードの再利用性が高まり、テストも容易になります。
+
+support-go.bizmo.in
+
+qiita.com
+
+relations-dev.hateblo.jp
+
+anpyo.co.jp
+
+engineering.webstudio168.jp
+Context　contextって通常どうやって取得するの？
+たまにコンストラクタの引数でうけとっているものあるけど
+ソース
+
+
+
+qiita.com favicon
+logmi.jp favicon
+note.com favicon
+mitoroid.com favicon
+zenn.dev favicon
+5 件をもっと見る
+回答
+Androidアプリ開発において、Contextの取得方法はいくつかあります。主な方法を説明します。
+一般的なContext取得方法
+Activityの中で:
+Activityクラスは自身がContextを継承しているため、thisキーワードで直接参照できます。
+java
+Context context = this;
+
+Fragmentの中で:
+getContext()メソッドを使用します。
+java
+Context context = getContext();
+
+Viewの中で:
+getContext()メソッドを使用します。
+java
+Context context = view.getContext();
+
+サービスの中で:
+サービスクラスも自身がContextを継承しているため、thisを使用できます。
+java
+Context context = this;
+
+アプリケーション全体で使用可能なContext:
+getApplicationContext()を使用します。これはアプリケーションのライフサイクル全体で有効です。
+java
+Context appContext = getApplicationContext();
+
+コンストラクタの引数で受け取る:
+カスタムViewやその他のクラスを作成する際によく使用されます。
+java
+public class MyCustomView extends View {
+    public MyCustomView(Context context) {
+        super(context);
+    }
+}
+
+注意点
+ActivityやFragmentのContextを長期間保持すると、メモリリークの原因になる可能性があります。
+アプリケーション全体で使用するContextが必要な場合は、getApplicationContext()を使用するのが安全です。
+UI関連の操作には、ActivityやFragmentのContextを使用するのが適切です。
+Contextをコンストラクタの引数で受け取るパターンは、主にカスタムViewやユーティリティクラスなど、特定のコンポーネントに依存しないクラスで使用されます。これにより、そのクラスを様々な場所で再利用しやすくなります。
+適切なContextの使用は、アプリケーションの設計と実装において重要な要素です。状況に応じて最適なContext取得方法を選択することが大切です。
+
+kanda-it-school-kensyu.com
+
+yuki312.blogspot.com
+
+jp-seemore.com
+
+jp-seemore.com
+
+zenn.dev
+geofenceにむいているのは？createGeofence
+ソース
+
+
+
+pusher.com favicon
+note.com favicon
+developer.android.com favicon
+android.keicode.com favicon
+qiita.com favicon
+5 件をもっと見る
+回答
+ジオフェンスの作成には、createGeofenceメソッドを使用するのが適切です。以下に、ジオフェンス作成のベストプラクティスと実装例を示します。
+ジオフェンス作成のベストプラクティス
+適切なコンテキストの使用: ActivityContextやApplicationContextを使用し、ReactNativeContextは避けます。
+パーミッションの確認: 位置情報の権限が付与されているか確認します。
+エラーハンドリング: ジオフェンス作成時の例外を適切に処理します。
+ユニークID: 各ジオフェンスに一意のIDを割り当てます。
+適切なパラメータ設定: 半径、遷移タイプなどを適切に設定します。
+実装例
+kotlin
+class GeofenceManager(private val context: Context) {
+
+    private val geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
+
+    fun createGeofence(latitude: Double, longitude: Double, radius: Float, id: String) {
+        val geofence = Geofence.Builder()
+            .setRequestId(id)
+            .setCircularRegion(latitude, longitude, radius)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+            .build()
+
+        val geofencingRequest = GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            .addGeofence(geofence)
+            .build()
+
+        val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // 権限がない場合の処理
+            return
+        }
+
+        geofencingClient.addGeofences(geofencingRequest, pendingIntent)
+            .addOnSuccessListener {
+                // ジオフェンス追加成功
+            }
+            .addOnFailureListener { e ->
+                // ジオフェンス追加失敗
+            }
+    }
+}
+
+この実装では:
+適切なコンテキスト（ActivityContextまたはApplicationContext）を使用しています。
+位置情報の権限チェックを行っています。
+ジオフェンスの追加成功/失敗をハンドリングしています。
+ユニークIDを使用しています。
+半径、遷移タイプなどのパラメータを適切に設定しています。
+このGeofenceManagerクラスを使用して、アプリケーション内で簡単にジオフェンスを作成できます。ReactNativeから使用する場合は、このネイティブコードをブリッジして呼び出すことができます。
+
+note.com
+
+xmisao.com
+
+marcominerva.wordpress.com
+
+ie.u-ryukyu.ac.jp
+zenn.dev
+refactoring.guru
+saekis.hatenablog.com
+もっと見る
+getGeofencingClient(context)のcontextは？
+ソース
+
+
+
+developers.google.com favicon
+zenn.dev favicon
+docs.oracle.com favicon
+developer.android.com favicon
+5 件をもっと見る
+回答
+getGeofencingClient(context)メソッドのcontextパラメータについて、以下のポイントを説明します：
+適切なContext:
+getGeofencingClient()メソッドには、ActivityContextまたはApplicationContextを渡すことができます。
+ActivityContextの使用:
+kotlin
+val geofencingClient = LocationServices.getGeofencingClient(this) // Activityの中で
+
+ApplicationContextの使用:
+kotlin
+val geofencingClient = LocationServices.getGeofencingClient(applicationContext)
+
+選択の基準:
+ActivityContextは、そのActivityのライフサイクルに紐づいた操作に適しています。
+ApplicationContextは、アプリケーション全体のライフサイクルに紐づいた操作に適しています。
+注意点:
+ActivityContextを長期間保持すると、メモリリークの原因になる可能性があります。
+ジオフェンスの操作がアプリケーション全体で必要な場合は、ApplicationContextを使用するのが安全です。
+推奨:
+一般的には、ジオフェンス操作はアプリケーション全体で管理されることが多いため、ApplicationContextを使用することが推奨されます。
+kotlin
+val geofencingClient = LocationServices.getGeofencingClient(applicationContext)
+
+このアプローチにより、Activityのライフサイクルに依存せず、アプリケーション全体でジオフェンス機能を利用できます。ただし、特定のActivityに紐づいた短期的な操作の場合は、ActivityContextを使用することも考慮に入れてください。
+
+developer.android.com
+
+dev.to
+
+practical-go-lessons.com
+
+sohamkamani.com
+astaxie.gitbooks.io
+kodeco.com
+jaegertracing.io
+もっと見る
+ApplicationContextはContext　context？
+ソース
+
+
+
+stackoverflow.com favicon
+zenn.dev favicon
+blog.meilcli.net favicon
+yuki312.blogspot.com favicon
+5 件をもっと見る
+回答
+はい、ApplicationContextはContext型のオブジェクトです。
+ApplicationContextについて重要なポイントをまとめると:
+ApplicationContextはContextクラスのサブクラスです。
+アプリケーション全体に関連するグローバルな情報へのアクセスを提供します。
+アプリケーションのライフサイクル全体で有効なコンテキストです。
+通常、getApplicationContext()メソッドを使用して取得します。
+ActivityやServiceなどの特定のコンポーネントに紐付いていないグローバルな操作に適しています。
+UIに関連する操作には適していません。
+メモリリークの心配が少ないため、長期的な保持に適しています。
+リソースへのアクセス、SharedPreferencesの使用、システムサービスの取得などに使用できます。
+したがって、ApplicationContextはContext型のオブジェクトであり、アプリケーション全体で使用可能なグローバルなコンテキストを提供します。ただし、その使用は適切な状況に限定する必要があります。
+
+What is Contexts in Android ?. Application Context vs Activity Context
+What is Contexts in Android ?. Application Context vs Activity Context
+Watch
+
+geeksforgeeks.org
+
+javarevisited.blogspot.com
+
+stackoverflow.com
+stackoverflow.com
+almightyjava.wordpress.com
+kotlinworld.com
+もっと見る
+reactnativeContexもContextでキャストしたら使えたよ
+ソース
+
+
+
+ja.legacy.reactjs.org favicon
+react-native-google-cast.github.io favicon
+docs.oracle.com favicon
+yuki312.blogspot.com favicon
+5 件をもっと見る
+回答
+ご報告ありがとうございます。ReactNativeContextをContextにキャストして使用できたというのは興味深い解決策です。この方法について、いくつかの重要なポイントを説明します：
+技術的な背景:
+ReactNativeContextは実際にはContextのサブクラスです。そのため、Contextへのキャストが可能になっています。
+注意点:
+この方法は公式にサポートされているわけではありません。将来のReact Nativeのバージョンで動作しなくなる可能性があります。
+ReactNativeContextに特有の機能にアクセスできなくなる可能性があります。
+推奨される代替方法:
+可能であれば、ReactContextBaseJavaModuleを継承したクラス内でreactContextを保持し、それを他のActivityから参照する方法を検討してください。
+ApplicationContextを使用し、必要な情報だけをActivityに渡す設計を検討してください。
+使用例:
+kotlin
+// ReactContextBaseJavaModuleを継承したクラス内
+class MyModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+    companion object {
+        lateinit var sharedReactContext: ReactApplicationContext
+    }
+
+    init {
+        sharedReactContext = reactContext
+    }
+}
+
+// 他のActivity内
+val context: Context = MyModule.sharedReactContext
+
+セキュリティとパフォーマンス:
+ReactNativeContextを直接使用することで、不要な機能へのアクセスが可能になり、セキュリティリスクが生じる可能性があります。また、パフォーマンスにも影響を与える可能性があります。
+この解決策は短期的には機能するかもしれませんが、長期的にはより堅牢で安全な方法を検討することをお勧めします。アプリケーションの設計を見直し、ReactNativeとネイティブコード間の適切な分離を維持することが重要です。
+
+
+github.com
+
+deku.posstree.com
+
+cmichel.io
+scholarhat.com
+logmi.jp
+dev.to
+もっと見る
+javaで書き直して
+回答
+はい、JavaでReactNativeContextをContextとして使用する例を示します。また、より安全な代替方法も含めて説明します。
+ReactNativeContextをContextとして使用する方法
+java
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+
+public class MyModule extends ReactContextBaseJavaModule {
+    private static ReactApplicationContext reactContext;
+
+    public MyModule(ReactApplicationContext context) {
+        super(context);
+        reactContext = context;
+    }
+
+    @Override
+    public String getName() {
+        return "MyModule";
+    }
+
+    // このメソッドを使用して他のクラスからContextを取得
+    public static Context getAppContext() {
+        return (Context) reactContext;
+    }
+}
+
+他のクラスでの使用例：
+java
+import android.content.Context;
+
+public class SomeOtherClass {
+    public void someMethod() {
+        Context context = MyModule.getAppContext();
+        // contextを使用した処理
+    }
+}
+
+注意点と推奨される代替方法
+ApplicationContextの使用:
+可能な限り、ApplicationContextを使用することをお勧めします。
+java
+import android.app.Application;
+
+public class MyApplication extends Application {
+    private static Context applicationContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        applicationContext = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return applicationContext;
+    }
+}
+
+使用例：
+java
+Context context = MyApplication.getAppContext();
+
+必要な情報のみを渡す:
+Contextの代わりに、必要な情報やインターフェースのみを渡すことを検討してください。
+依存性注入の利用:
+Dagger2などの依存性注入フレームワークを使用して、適切なContextを提供することを検討してください。
+インターフェースの抽象化:
+Contextに依存する代わりに、必要な機能のみを提供するインターフェースを定義し、それを実装するクラスを作成することを検討してください。
+java
+public interface ContextProvider {
+    String getString(int resId);
+    // 他の必要なメソッド
+}
+
+public class AndroidContextProvider implements ContextProvider {
+    private Context context;
+
+    public AndroidContextProvider(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    public String getString(int resId) {
+        return context.getString(resId);
+    }
+    // 他のメソッドの実装
+}
+
+これらの方法は、ReactNativeContextを直接使用するよりも安全で、将来的な変更にも強いアプローチです。アプリケーションの設計と要件に応じて、最適な方法を選択してください。
+ジオフェンスレシーバーで受け取るコンテキストとジオフェンス作成時に使うコンテキストは別物？
+ソース
+
+
+
+learn.microsoft.com favicon
+ja.legacy.reactjs.org favicon
+zenn.dev favicon
+aitoya.com favicon
+yuki312.blogspot.com favicon
+5 件をもっと見る
+回答
+ジオフェンスレシーバーで受け取るコンテキストとジオフェンス作成時に使うコンテキストは、通常は別のものです。それぞれの特徴と違いを説明します：
+ジオフェンス作成時のコンテキスト:
+通常はActivityContextやApplicationContextを使用します。
+ジオフェンスの設定や登録に必要な操作を行うために使用されます。
+多くの場合、ApplicationContextを使用することが推奨されます。これにより、アプリケーションのライフサイクル全体でジオフェンスを管理できます。
+java
+GeofencingClient geofencingClient = LocationServices.getGeofencingClient(getApplicationContext());
+
+ジオフェンスレシーバーで受け取るコンテキスト:
+BroadcastReceiverのonReceiveメソッドで受け取るコンテキストです。
+このコンテキストは、システムによって提供される一時的なコンテキストです。
+レシーバーがトリガーされた時点でのアプリケーションの状態を反映しています。
+java
+public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        // このcontextはシステムから提供される
+    }
+}
+
+主な違い:
+ライフサイクル: 作成時のコンテキストは長期的に使用されますが、レシーバーのコンテキストは一時的です。
+提供元: 作成時のコンテキストはアプリケーションから提供されますが、レシーバーのコンテキストはシステムから提供されます。
+使用目的: 作成時のコンテキストはジオフェンスの設定に使用され、レシーバーのコンテキストはジオフェンスイベントの処理に使用されます。
+アクセス可能なリソース: 作成時のコンテキストはアプリケーションの全リソースにアクセスできる可能性がありますが、レシーバーのコンテキストはより制限されている可能性があります。
+したがって、これらのコンテキストは別物であり、それぞれの目的に応じて適切に使用する必要があります。ジオフェンスの作成と管理には長期的なコンテキスト（ApplicationContext）を使用し、イベント処理にはシステムから提供される一時的なコンテキストを使用するのが一般的なアプローチです。
