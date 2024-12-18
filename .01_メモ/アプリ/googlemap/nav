@@ -1794,7 +1794,12 @@ navigation.addListener('filterResultsUpdate', (e) => {
 つまり、名前を変えれば何個でもリスナーを追加でき、異なる処理を行うことができます。
 
 
-
-
-
-
+https://reactnavigation.org/docs/navigation-events/?utm_source=chatgpt.com
+https://reactnavigation.org/docs/5.x/navigation-events/?utm_source=chatgpt.com
+https://qiita.com/dhythm/items/125ab18844fe86ec4041
+https://sunnychopper.medium.com/understanding-the-lifecycle-of-react-navigation-to-add-custom-events-to-your-react-native-app-11e1d9547f47
+https://github.com/react-navigation/react-navigation/issues/6941
+https://github.com/Choices-js/Choices
+https://zenn.dev/ryohei0509/articles/eb1a9ebe11a8c6
+https://zenn.dev/ryohei0509/articles/eb1a9ebe11a8c6
+https://fintan-contents.github.io/mobile-app-crib-notes/react-native/learn/basic-concepts/react-navigation-basics/
