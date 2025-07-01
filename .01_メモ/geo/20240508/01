@@ -1,0 +1,113 @@
+このコードを基に
+①APIを呼び出す為のリクエストパラメータを作成する
+②リクエストパラメータを用いてAPIを呼び出す
+③statusコードがHTTPrequestの成功コードかチェック
+④成功なら結果からリクエストキーがとりだせているかチェックする（ループ）
+⑤３秒まつ
+⑥リクエストキーが存在しなければ再度APIを呼び出す
+⑦リクエストキーが存在すればリクエストパラメータに設定（ループ終了）
+⑧再度APIを呼び出す
+⑨結果をJSON文字列に変換
+
+実装お願いします
+ChatGPT
+以下のコードは、指定された処理のステップに従ってJava（Android環境向け）でAPIリクエストを行い、特定のリクエストキーを待機して再度APIを呼び出す処理を実装したものです。この処理は特にリクエストキーが含まれるまでループして待機し、その後に再度APIを呼び出します。
+
+コードの実装例
+java
+Copy code
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class ApiRequestLooper {
+
+    private static final String API_URL = "https://example.com/api";
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    public static void main(String[] args) {
+        executor.execute(() -> {
+            try {
+                String requestKey = getRequestKey(API_URL);
+                if (requestKey != null) {
+                    System.out.println("Final response with Request Key: " + fetchDataFromApi(API_URL, requestKey));
+                } else {
+                    System.out.println("Request Key was not found.");
+                }
+            } finally {
+                executor.shutdown();
+            }
+        });
+    }
+
+    private static String getRequestKey(String urlString) {
+        String requestKey = null;
+
+        try {
+            while (requestKey == null) {
+                HttpURLConnection connection = setupHttpConnection(new URL(urlString));
+                int responseCode = connection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String response = readResponse(connection);
+                    JSONObject jsonResponse = new JSONObject(response);
+
+                    if (jsonResponse.has("requestKey")) {
+                        requestKey = jsonResponse.getString("requestKey");
+                        System.out.println("Request Key found: " + requestKey);
+                        break;
+                    } else {
+                        System.out.println("Request Key not found, retrying in 3 seconds...");
+                        TimeUnit.SECONDS.sleep(3);
+                    }
+                } else {
+                    System.out.println("HTTP Request Failed with status: " + responseCode);
+                }
+                connection.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return requestKey;
+    }
+
+    private static HttpURLConnection setupHttpConnection(URL url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        return connection;
+    }
+
+    private static String readResponse(HttpURLConnection connection) throws IOException {
+        StringBuilder response = new StringBuilder();
+        try (InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+             BufferedReader bufferedReader = new BufferedReader(streamReader)) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                response.append(line);
+            }
+        }
+        return response.toString();
+    }
+
+    private static String fetchDataFromApi(String urlString, String requestKey) throws IOException, JSONException {
+        URL url = new URL(urlString + "?requestKey=" + requestKey);
+        HttpURLConnection connection = setupHttpConnection(url);
+        String response = "";
+        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            response = readResponse(connection);
+        }
+        connection.disconnect();
+        return response;
+    }
+}
+説明
+APIを呼び出す: getRequestKey メソッドが初期API呼び出しを担い、リクエストキーを探します。
+リクエストキーの確認: レスポンス内に requestKey が存在するかを確認し、存在しない場合は3秒待って再度リクエストします。
+終了条件: requestKey が得られたら、それを使って最終的なデータを取得します。
+このコードは基本的なエラーハンドリングを含んでいますが、実際のアプリケーションではさらに詳細なエラー処理や例外管理が必要になるかもしれません。また、APIのエンドポイントやパラメータ、HTTPメソッドなどは、実際のAPI仕様に応じて適宜調整が必要です。

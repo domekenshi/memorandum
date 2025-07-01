@@ -1,0 +1,48 @@
+Javaのネイティブメソッドでオブジェクトを受け取り、その内容を展開して変数に格納するには、ReadableMap インターフェイスを使用します。これは React Native が提供するインターフェイスで、JavaScript のオブジェクトを Java で扱えるようにするためのものです。
+
+以下に、React Native から Java にオブジェクトを渡し、それを Java で受け取って展開する方法を示します。
+
+Javaでのモジュールの実装
+java
+Copy code
+package com.example.reactmodule;
+
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+
+public class ExampleModule extends ReactContextBaseJavaModule {
+    public ExampleModule(ReactApplicationContext reactContext) {
+        super(reactContext);
+    }
+
+    @Override
+    public String getName() {
+        return "ExampleModule";
+    }
+
+    @ReactMethod
+    public void showHello(ReadableMap info) {
+        // ReadableMapからデータを取り出す
+        String name = info.getString("name");
+        int age = info.getInt("age");
+
+        // 例としてToastを表示
+        Toast.makeText(getReactApplicationContext(), "Name: " + name + ", Age: " + age, Toast.LENGTH_LONG).show();
+    }
+}
+
+React Nativeでのモジュールの利用
+javascript
+Copy code
+import { NativeModules } from 'react-native';
+
+// Javaモジュールのメソッドを呼び出し、オブジェクトを渡す
+NativeModules.ExampleModule.showHello({
+  name: "John",
+  age: 30
+});
+この例では、JavaScriptから { name: "John", age: 30 } というオブジェクトを Java のメソッドに渡し、Java側で ReadableMap を通じて個々のプロパティを読み取り、Toastで表示しています。これにより、異なるデータ型を含む複雑なデータ構造も簡単に扱うことができます。
+
+この方法で、React Native と Java の間でのデータ交換がうまく行えるはずです。他に何かご質問があればどうぞ。

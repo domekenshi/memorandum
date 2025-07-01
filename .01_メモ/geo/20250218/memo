@@ -1,0 +1,555 @@
+android javaでジオフェンス作成に必要な処理と設定を全てあらいだして
+ChatGPT:
+Android Javaでジオフェンス（Geofence）を作成するために必要な処理と設定をすべて洗い出しました。
+
+1. 必要な権限の追加
+📌 AndroidManifest.xml に以下の権限を追加
+xml
+コピーする
+編集する
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>  <!-- 端末再起動時にジオフェンスを復元する場合 -->
+ACCESS_FINE_LOCATION → GPSなど高精度の位置情報取得
+ACCESS_COARSE_LOCATION → Wi-Fiや基地局情報で位置取得
+RECEIVE_BOOT_COMPLETED → 端末起動時にジオフェンスを再登録（必要なら）
+📌 Android 10 (API 29) 以降のバックグラウンド位置情報権限
+xml
+コピーする
+編集する
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+Android 10以上ではACCESS_BACKGROUND_LOCATIONが必要（バックグラウンドでジオフェンスを使う場合）
+2. Google Play Servicesの依存関係を追加
+build.gradle (Module: app) に依存関係を追加
+
+gradle
+コピーする
+編集する
+dependencies {
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+}
+3. 位置情報の権限確認＆リクエスト
+📌 MainActivity.java
+java
+コピーする
+編集する
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1001);
+}
+ACCESS_FINE_LOCATION の許可を確認し、未許可ならリクエスト
+4. Google API クライアントのセットアップ
+java
+コピーする
+編集する
+private FusedLocationProviderClient fusedLocationClient;
+private GeofencingClient geofencingClient;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+    geofencingClient = LocationServices.getGeofencingClient(this);
+}
+FusedLocationProviderClient → 現在位置取得
+GeofencingClient → ジオフェンスを管理するためのクライアント
+5. ジオフェンスの作成
+java
+コピーする
+編集する
+private Geofence createGeofence(String requestId, double lat, double lng, float radius) {
+    return new Geofence.Builder()
+        .setRequestId(requestId)
+        .setCircularRegion(lat, lng, radius)
+        .setExpirationDuration(Geofence.NEVER_EXPIRE)  // 無期限
+        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+        .build();
+}
+setRequestId(requestId) → ユニークなID（識別用）
+setCircularRegion(lat, lng, radius) → 中心座標と半径を設定
+setExpirationDuration(Geofence.NEVER_EXPIRE) → 無期限で動作（時間制限ありの場合はミリ秒指定）
+setTransitionTypes()
+GEOFENCE_TRANSITION_ENTER → エリアに入ったとき
+GEOFENCE_TRANSITION_EXIT → エリアから出たとき
+GEOFENCE_TRANSITION_DWELL → エリア内に一定時間滞在したとき
+6. ジオフェンスリクエストの作成
+java
+コピーする
+編集する
+private GeofencingRequest createGeofenceRequest(Geofence geofence) {
+    return new GeofencingRequest.Builder()
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+        .addGeofence(geofence)
+        .build();
+}
+setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER) → 初回エリア進入時にトリガーを発火
+addGeofence(geofence) → ジオフェンスを追加
+7. ジオフェンスの追加
+📌 PendingIntent の作成（ジオフェンスイベントを受け取る）
+java
+コピーする
+編集する
+private PendingIntent getGeofencePendingIntent() {
+    Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
+    return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+}
+Intent を GeofenceBroadcastReceiver に渡す
+PendingIntent.FLAG_UPDATE_CURRENT → 既存のインテントを更新
+📌 GeofencingClient に登録
+java
+コピーする
+編集する
+public void addGeofence(Geofence geofence) {
+    GeofencingRequest request = createGeofenceRequest(geofence);
+
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        geofencingClient.addGeofences(request, getGeofencePendingIntent())
+            .addOnSuccessListener(() -> Log.d("Geofence", "追加成功"))
+            .addOnFailureListener(e -> Log.e("Geofence", "追加失敗: " + e));
+    }
+}
+位置情報の権限チェックを行い、許可されていればジオフェンスを登録
+8. ブロードキャストレシーバーの実装
+ジオフェンスのイベントを受け取る GeofenceBroadcastReceiver を作成
+
+📌 GeofenceBroadcastReceiver.java
+java
+コピーする
+編集する
+public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+        if (geofencingEvent.hasError()) {
+            Log.e("GeofenceReceiver", "エラー発生: " + geofencingEvent.getErrorCode());
+            return;
+        }
+
+        int transitionType = geofencingEvent.getGeofenceTransition();
+        String transitionMessage = "";
+
+        if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            transitionMessage = "ジオフェンスエリアに入りました";
+        } else if (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            transitionMessage = "ジオフェンスエリアから出ました";
+        }
+
+        Log.d("GeofenceReceiver", transitionMessage);
+    }
+}
+onReceive() でジオフェンスのイベントをキャッチ
+geofencingEvent.getGeofenceTransition() で 進入 or 退出 を判定
+📌 AndroidManifest.xml に BroadcastReceiver を登録
+xml
+コピーする
+編集する
+<receiver android:name=".GeofenceBroadcastReceiver" android:exported="false"/>
+9. アプリの起動時にジオフェンスを復元
+端末を再起動するとジオフェンスは消えるため、再起動時に復元する処理を実装
+
+📌 BootReceiver.java
+java
+コピーする
+編集する
+public class BootReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            // ここでジオフェンスを再登録
+        }
+    }
+}
+📌 AndroidManifest.xml に BootReceiver を登録
+xml
+コピーする
+編集する
+<receiver android:name=".BootReceiver" android:exported="false">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+    </intent-filter>
+</receiver>
+✅ まとめ
+必要な パーミッションの設定
+Google Play Servicesの依存関係を追加
+位置情報の権限チェック
+Google API クライアントのセットアップ
+ジオフェンスを作成
+ジオフェンスリクエストの作成
+ジオフェンスの追加 & 削除
+ブロードキャストレシーバーの実装
+端末再起動時のジオフェンス復元処理
+この流れで実装すれば、Android Javaでジオフェンスを正しく動作させることができます💡
+/////////////////////////////////////////
+android javaのthisって何を表す？
+ChatGPT:
+Android Java の this とは？
+Android Java でも、this は 「現在のオブジェクト自身」 を指します。
+ただし、Android 開発では this の指す対象が状況によって変わる ので注意が必要です。
+
+1. Activity クラス内での this
+Activity クラス内で this を使うと、その Activity のインスタンスを指します。
+たとえば、以下のように Context として this を使うことが多いです。
+
+java
+コピーする
+編集する
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Context を必要とする処理
+        Toast.makeText(this, "こんにちは！", Toast.LENGTH_SHORT).show();
+
+        // Activity のコンテキストとして `this` を渡す
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
+    }
+}
+📌 ポイント
+
+this は MainActivity のインスタンス（MainActivity.this）を指す
+Context が必要な場面（Toast や Intent など）で this を渡せる
+2. this の明示的な指定 (クラス名.this)
+this の指すオブジェクトが 曖昧になる場合、クラス名.this を使って明示的に指定できます。
+
+🔹 内部クラス（Inner Class）での this
+内部クラス（View.OnClickListener など）内では、this はその 内部クラスのインスタンス を指します。
+外部クラスのインスタンスを参照したい場合は 外部クラス名.this を使います。
+
+java
+コピーする
+編集する
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // `this` は `OnClickListener` のインスタンスを指す
+                // MainActivity を参照したい場合は `MainActivity.this` を使う
+                Toast.makeText(MainActivity.this, "ボタンがクリックされました！", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+📌 ポイント
+
+this → OnClickListener インスタンスを指す（Context ではない！）
+MainActivity.this → MainActivity のインスタンスを明示的に指定
+3. this を Context として渡すケース
+Android では Context を渡す場面が多い ため、this を Context として使うことがよくあります。
+
+🔹 this を Context として渡せる例
+java
+コピーする
+編集する
+AlertDialog.Builder builder = new AlertDialog.Builder(this);
+builder.setTitle("タイトル")
+       .setMessage("メッセージ")
+       .setPositiveButton("OK", null)
+       .show();
+📌 ポイント
+
+AlertDialog.Builder は Context を要求するので、this（MainActivity のインスタンス）を渡せる
+4. this を Context ではなく Application Context にする場合
+通常の this は Activity の Context ですが、アプリ全体の Context（Application Context）を取得することもできます。
+
+java
+コピーする
+編集する
+Context appContext = getApplicationContext();
+Toast.makeText(appContext, "アプリの Context で表示", Toast.LENGTH_SHORT).show();
+📌 this vs getApplicationContext()
+
+用途	this（ActivityのContext）	getApplicationContext()
+Toast の表示	✅ 使える	✅ 使える
+Intent の作成	✅ 使える	❌ 使えない（startActivity は Activity の Context が必要）
+AlertDialog の表示	✅ 使える	❌ 使えない（Activity に関連する Context が必要）
+SharedPreferences の取得	✅ 使える	✅ 使える
+Service の開始	✅ 使える	✅ 使える
+🔹 getApplicationContext() を使うべき場面
+
+Activity に依存しない長時間動作する処理（例えば Service）を開始するとき
+5. this を Activity 以外で使うケース
+🔹 Fragment で this を使う場合
+Fragment 内では this は Fragment を指します。
+Context が必要な場合は getContext() または getActivity() を使う。
+
+java
+コピーする
+編集する
+public class MyFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_my, container, false);
+
+        Toast.makeText(getContext(), "Fragment のコンテキスト", Toast.LENGTH_SHORT).show();
+
+        return view;
+    }
+}
+📌 ポイント
+
+this → Fragment を指す（Context ではない）
+getContext() → Fragment の Context を取得
+getActivity() → Activity のインスタンスを取得
+結論：Android Java の this まとめ
+シチュエーション	this の意味
+Activity 内	Activity のインスタンス（Context として使える）
+内部クラス内	内部クラスのインスタンス（Activity を参照するには 外部クラス名.this を使う）
+this を Context として使用	Activity の Context（Toast や AlertDialog に使える）
+getApplicationContext() を使う	アプリ全体の Context（Activity に依存しない処理に使う）
+Fragment 内	Fragment のインスタンス（Context は getContext() を使う）
+💡 Android では this の指す対象が状況によって変わるので注意！
+/////////////////////////////////
+geofenceのonReceiveでエミュレータの位置情報変更しても処理が走らないのはどうして？ジオフェンスの作成は成功しています。たまにtrrigerをEXITにするとonreceiveは反応します。ただしトリガーしたロケーションは数値が対象のジオフェンスよりおかしいです
+ChatGPT:
+Geofence の onReceive が期待通りに動作しない原因として、以下のポイントを確認してみてください。
+
+1. Geofence のトリガー条件を正しく設定しているか？
+エミュレータの位置変更時に ENTER では反応せず EXIT で反応する場合、ジオフェンスの初期位置が想定と異なる可能性 があります。
+エミュレータ起動時の位置情報が ジオフェンスの円の内部にあるかどうか 確認してください。
+
+✅ 確認方法
+adb コマンドを使って現在の位置を取得して、ジオフェンスの中心と比較する。
+
+sh
+コピーする
+編集する
+adb shell dumpsys location | grep "Last Known Locations"
+エミュレータの 起動時にジオフェンスの内側にいる場合、ENTER トリガーは発動しません。
+この場合、EXIT は正常に発動する可能性があります。
+
+2. GeofencingRequest の設定が適切か？
+ジオフェンスの triggers が GEOFENCE_TRANSITION_ENTER だけになっていると、初回の位置変更では反応しないことがあります。
+試しに ENTER | EXIT の両方を登録して動作を確認してください。
+
+java
+コピーする
+編集する
+GeofencingRequest geofencingRequest = new GeofencingRequest.Builder()
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+        .addGeofence(geofence)
+        .build();
+💡 setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER) を設定することで、現在ジオフェンス内にいる場合も ENTER を発火 させることができます。
+
+3. Geofence の半径が適切か？
+エミュレータの GPS 位置情報の精度はそこまで高くなく、数メートル程度のズレが発生することがあります。
+半径を小さくしすぎると、ジオフェンス内外の判定が不安定になる ことがあります。
+
+java
+コピーする
+編集する
+float GEOFENCE_RADIUS_IN_METERS = 100; // 100m以上が推奨
+特に 10m 以下の半径では不安定 になることが多いです。試しに 100m 以上 にして動作確認してください。
+
+4. GeofencingClient に正しく登録されているか？
+addGeofences() の処理が成功しているか、addOnSuccessListener() や addOnFailureListener() で確認できます。
+
+java
+コピーする
+編集する
+geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+        .addOnSuccessListener(aVoid -> Log.d("Geofence", "登録成功"))
+        .addOnFailureListener(e -> Log.e("Geofence", "登録失敗", e));
+エラーが出ている場合、何かしらの問題が発生している可能性があります。
+
+5. BroadcastReceiver が正しく登録されているか？
+onReceive が実行されない場合、BroadcastReceiver の登録や PendingIntent の設定に問題があるかもしれません。
+
+✅ PendingIntent の設定を FLAG_MUTABLE にする
+
+java
+コピーする
+編集する
+PendingIntent geofencePendingIntent = PendingIntent.getBroadcast(
+    context,
+    0,
+    intent,
+    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE // FLAG_MUTABLE を追加
+);
+Android 12 以降 では PendingIntent に FLAG_MUTABLE を追加しないと BroadcastReceiver が動かないことがあります。
+
+✅ AndroidManifest.xml に receiver の登録があるか確認
+
+xml
+コピーする
+編集する
+<receiver android:name=".GeofenceBroadcastReceiver"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="com.google.android.gms.location.GeofenceTransitionsIntentService"/>
+    </intent-filter>
+</receiver>
+exported="true" を追加しないと、Android 12 以降では動かない 可能性があります。
+
+6. ACCESS_BACKGROUND_LOCATION のパーミッションを取得しているか？
+Geofence は バックグラウンドでも動作する機能 なので、Android 10 以降では ACCESS_BACKGROUND_LOCATION のパーミッションが必要になります。
+
+✅ AndroidManifest.xml に以下のパーミッションがあるか確認
+
+xml
+コピーする
+編集する
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+Android 10 以降では、ユーザーが手動で 設定 > アプリ > 位置情報 から 「常に許可」 を選択しないと Geofence が動作しません。
+
+7. FusedLocationProviderClient の lastLocation が古くなっていないか？
+Geofence は 最新の位置情報に依存する ので、FusedLocationProviderClient を使って最新の位置を取得しているか確認してください。
+
+✅ 最新の位置を取得
+
+java
+コピーする
+編集する
+FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+fusedLocationClient.getLastLocation()
+    .addOnSuccessListener(location -> {
+        if (location != null) {
+            Log.d("Geofence", "現在位置: " + location.getLatitude() + ", " + location.getLongitude());
+        }
+    });
+もし location が null の場合、位置情報の取得が失敗している可能性があります。
+
+8. エミュレータの GPS が正しく動作しているか？
+エミュレータの GPS が不安定だと、ジオフェンスが正しく動作しない ことがあります。
+
+✅ エミュレータで手動設定
+
+Android Studio の「Extended controls」 を開く
+「Location」タブ を選択
+手動で位置情報を設定してみる
+onReceive が発火するか確認
+✅ adb コマンドで GPS を変更
+
+sh
+コピーする
+編集する
+adb shell am startservice -n com.android.location.fused/.FusedLocationService
+adb shell am broadcast -a android.intent.action.SET_GPS_STATUS --ei enabled 1
+adb shell am broadcast -a android.intent.action.SET_LOCATION --es location "37.7749,-122.4194"
+37.7749,-122.4194 はサンフランシスコの座標ですが、テスト用に変更してみてください。
+
+結論
+onReceive が動作しない主な原因は以下のどれかの可能性が高いです。
+
+エミュレータの初期位置がジオフェンス内にある → ENTER が発火しない
+→ setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER) を試す
+ジオフェンスの半径が小さすぎる
+→ 100m 以上 に変更してみる
+BroadcastReceiver が正しく登録されていない
+→ AndroidManifest.xml を確認
+ACCESS_BACKGROUND_LOCATION のパーミッション不足
+→ Android 10 以降 では 常に許可 が必要
+エミュレータの GPS 位置が正しく更新されていない
+→ adb コマンドや Extended controls で手動設定
+このあたりを一つずつ確認してみると、問題の原因が見えてくると思います！🚀
+
+////////////////////////////////////////////////////////////////////////////////////////
+FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+fusedLocationClient.getLastLocation()
+    .addOnSuccessListener(location -> {
+        if (location != null) {
+            Log.d("Geofence", "現在位置: " + location.getLatitude() + ", " + location.getLongitude());
+        }
+    });エミュレータで位置情報を変更しても位置情報がジオフェンスの座標のままかわらない
+
+
+ChatGPT:
+FusedLocationProviderClient.getLastLocation() が更新されない原因はいくつか考えられます。エミュレータで位置情報を変更しても lastLocation が変わらない場合、以下の点を確認してください。
+
+1. getLastLocation() はキャッシュされた位置を返す
+getLastLocation() は 最後に取得された位置情報を返すだけ であり、新しい位置を即座に取得するわけではありません。そのため、エミュレータで位置情報を変更しても反映されないことがあります。
+
+🔧 解決策
+👉 リアルタイムで位置情報を取得する requestLocationUpdates() を使う
+
+java
+コピーする
+編集する
+LocationRequest locationRequest = LocationRequest.create()
+    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+    .setInterval(5000) // 5秒ごとに更新
+    .setFastestInterval(2000); // 最速2秒ごと
+
+LocationCallback locationCallback = new LocationCallback() {
+    @Override
+    public void onLocationResult(LocationResult locationResult) {
+        if (locationResult == null) return;
+        for (Location location : locationResult.getLocations()) {
+            Log.d("Geofence", "現在位置: " + location.getLatitude() + ", " + location.getLongitude());
+        }
+    }
+};
+
+// 位置情報の更新をリクエスト
+fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+💡 requestLocationUpdates() を使うことで、エミュレータで位置情報を変更すると即座に反映されます。
+
+2. エミュレータの GPS 位置情報が正しく更新されていない
+エミュレータの GPS は 一度変更しても、内部的には更新されていない ことがあります。これを修正するため、手動または adb コマンドで位置情報を再設定してみてください。
+
+🔧 解決策
+✅ Android Studio のエミュレータ設定
+エミュレータを開く
+「Extended controls（⋮ボタン）」を開く
+「Location」タブを開く
+緯度・経度を手動入力（例: 35.6895, 139.6917 東京の座標）
+「Set Location」ボタンを押す
+requestLocationUpdates() のログを確認する
+3. adb コマンドで強制的に位置情報を変更
+手動で変更してもダメな場合、adb コマンドを使って GPS を更新するのも手です。
+
+sh
+コピーする
+編集する
+adb shell am startservice -n com.android.location.fused/.FusedLocationService
+adb shell am broadcast -a android.intent.action.SET_LOCATION --es location "35.6895,139.6917"
+または、より確実に動作させるには geo fix コマンドを使います。
+
+sh
+コピーする
+編集する
+adb shell "geo fix 139.6917 35.6895"
+(東京の緯度・経度の例)
+
+💡 geo fix を使うと、エミュレータの GPS に即座に反映されることが多いです。
+
+4. 位置情報の設定が OFF になっていないか？
+エミュレータの 設定アプリで「位置情報」がオフになっていると、getLastLocation() が更新されません。
+
+🔧 解決策
+👉 エミュレータの設定を開き、以下を確認
+
+「設定」アプリを開く
+「位置情報」→「アプリの権限」
+ACCESS_FINE_LOCATION と ACCESS_COARSE_LOCATION の許可
+「位置情報のモード」を「高精度」に設定
+5. ACCESS_BACKGROUND_LOCATION がないと getLastLocation() が動作しない場合がある
+Android 10 以降では、ACCESS_BACKGROUND_LOCATION のパーミッションがないと、バックグラウンドでの位置情報が更新されないことがあります。
+
+🔧 解決策
+👉 AndroidManifest.xml に以下を追加
+
+xml
+コピーする
+編集する
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+👉 Android 10 以上の場合、設定 > アプリ > 権限 > 位置情報 から「常に許可」にする
+
+まとめ
+getLastLocation() はキャッシュされた位置を返す → requestLocationUpdates() を使う
+エミュレータの GPS 位置情報が正しく更新されていない → Android Studio の Location 設定 or adb shell geo fix を試す
+エミュレータの「設定 > 位置情報」が OFF になっている可能性 → 「位置情報のモード」を「高精度」にする
+Android 10 以降では ACCESS_BACKGROUND_LOCATION が必要 → パーミッションを追加＆アプリの設定で「常に許可」にする
+このあたりをチェックすれば、エミュレータの位置情報が更新されない問題が解決するはずです！🚀

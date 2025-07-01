@@ -1,0 +1,1580 @@
+GorhomのBottomSheetとBottomSheetModalの違い
+ソース
+回答
+GorhomのBottomSheetとBottomSheetModalには以下のような主な違いがあります:
+レンダリング位置:
+BottomSheetは親コンポーネント内にレンダリングされます。
+BottomSheetModalは@gorhom/portalを使用して、アプリケーションの最上位にレンダリングされます3。
+使用目的:
+BottomSheetは通常、画面の一部として常に表示されるコンポーネントに使用されます。
+BottomSheetModalは、ボタンクリックなどのアクションによって表示/非表示を切り替えるモーダルとして使用されます2。
+表示制御:
+BottomSheetModalは、present()メソッドを使用して表示をコントロールできます4。
+これにより、アプリケーションのどこからでも簡単に呼び出すことができます。
+スタック機能:
+BottomSheetModalは複数のモーダルをスタックさせる機能をサポートしています2。
+アニメーション:
+BottomSheetModalは、スムーズな表示/非表示のアニメーションを提供します2。
+柔軟性:
+BottomSheetModalは、アプリケーションのどの部分からでも呼び出せるため、より柔軟な使用が可能です3。
+これらの違いから、BottomSheetModalは動的に表示/非表示を切り替える必要がある場合や、アプリケーション全体で共有するボトムシートが必要な場合に適しています。一方、BottomSheetは画面の一部として常に表示される場合に適しています。
+関連
+BottomSheetとBottomSheetModalの使い方の具体例は
+BottomSheetModalのdetachedプロパティの使い方は
+BottomSheetModalのアニメーション設定はどうすればいい
+BottomSheetModalを複数のスクリーンで使う方法は
+BottomSheetModalの背景画像を設定する方法は
+
+github.com
+
+github.com
+
+galaxies.dev
+
+github.com
+github.com
+npmjs.com
+github.com
+もっと見る
+BottomSheetとBottomSheetModalの使い方の具体例は
+ソース
+回答
+GorhomのBottomSheetとBottomSheetModalの使い方について、具体例を交えて説明します。
+BottomSheet
+BottomSheetは親コンポーネント内にレンダリングされ、通常画面の一部として常に表示されるコンポーネントに使用されます。
+javascript
+import React, { useCallback, useMemo, useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { BottomSheet } from '@gorhom/bottom-sheet';
+
+const App = () => {
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  // renders
+  return (
+    <View style={styles.container}>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+      >
+        <View style={styles.contentContainer}>
+          <Text>Awesome 🎉</Text>
+        </View>
+      </BottomSheet>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});
+
+export default App;
+
+この例では、BottomSheetは常に画面上に表示され、3つのスナップポイント（25%、50%、75%）を持っています。
+BottomSheetModal
+BottomSheetModalは動的に表示/非表示を切り替える必要がある場合に適しています。
+javascript
+import React, { useCallback, useMemo, useRef } from 'react';
+import { View, Button, StyleSheet } from 'react-native';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+
+const App = () => {
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  // renders
+  return (
+    <BottomSheetModalProvider>
+      <View style={styles.container}>
+        <Button
+          onPress={handlePresentModalPress}
+          title="Present Modal"
+          color="black"
+        />
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={1}
+          snapPoints={snapPoints}
+          backgroundStyle={styles.bottomSheetBackground}
+        >
+          <View style={styles.contentContainer}>
+            <Text>Awesome 🎉</Text>
+          </View>
+        </BottomSheetModal>
+      </View>
+    </BottomSheetModalProvider>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  bottomSheetBackground: {
+    borderRadius: 20,
+    marginHorizontal: 16,
+    marginBottom: 17,
+  },
+});
+
+export default App;
+
+この例では、ボタンをタップするとBottomSheetModalが表示されます。また、backgroundStyleプロパティを使用してボトムシートの背景スタイルをカスタマイズしています4。
+主な違いは:
+BottomSheetModalはBottomSheetModalProviderでラップする必要があります。
+present()メソッドを使用して表示をコントロールします。
+BottomSheetModalは@gorhom/portalを使用してアプリケーションの最上位にレンダリングされるため、より柔軟な使用が可能です。
+これらの例を参考に、アプリケーションの要件に応じて適切なコンポーネントを選択し、実装することができます。
+
+zenn.dev
+
+zenn.dev
+
+dev.classmethod.jp
+
+note.com
+zenn.dev
+flutter.keicode.com
+coderenkin.com
+もっと見る
+BottomSheetにできてBottomSheetModalにできないことは？
+ソース
+回答
+BottomSheetとBottomSheetModalの主な違いを考慮すると、BottomSheetにできてBottomSheetModalにできない主な点は以下のとおりです:
+常時表示:
+BottomSheetは画面の一部として常に表示し続けることができますが、BottomSheetModalは通常、ユーザーアクションによって表示/非表示が切り替わります。
+親コンポーネント内でのレンダリング:
+BottomSheetは親コンポーネント内に直接レンダリングできますが、BottomSheetModalは@gorhom/portalを使用してアプリケーションの最上位にレンダリングされます。
+他の要素との同時インタラクション:
+BottomSheetは表示されている状態でも、画面の他の部分とのインタラクションを許可できます。一方、BottomSheetModalはモーダルとして機能するため、表示中は他の画面要素との相互作用を制限します。
+スクロール可能なコンテンツとの統合:
+BottomSheetは、スクロール可能なコンテンツ（例：リスト）と直接統合して、シームレスなスクロール体験を提供できます。BottomSheetModalでは、この統合がやや複雑になる可能性があります。
+柔軟なレイアウト制御:
+BottomSheetは親コンポーネント内にあるため、他のUI要素との相対的な配置や相互作用をより細かく制御できます。BottomSheetModalは独立したコンポーネントとして機能するため、このような細かい制御が難しい場合があります。
+パフォーマンスの最適化:
+常に表示されているBottomSheetは、アプリケーションの他の部分と一緒にレンダリングされるため、特定のシナリオではパフォーマンスの最適化が容易になる場合があります。
+これらの点から、BottomSheetは画面の一部として常に存在し、他の要素と密接に統合される必要がある場合に適しています。一方、BottomSheetModalは独立したモーダルコンポーネントとして、必要に応じて表示/非表示を切り替える場合に適しています。
+
+dhiwise.com
+
+nngroup.com
+
+github.com
+
+medium.flutterdevs.com
+designboyo.com
+getwidget.dev
+もっと見る
+GoogleMapにみたいに地図操作とBottomSheet操作、BottomSheetコンテンツの切り替えなどの場合はどちらが向いている？
+ソース
+回答
+GoogleMap風のインターフェースを実装する場合、BottomSheetの方が適しています。以下に理由を説明します：
+常時表示と動的な調整:
+BottomSheetは画面の一部として常に表示され、地図とシームレスに統合できます1。地図の操作に応じてBottomSheetの高さを動的に調整することが可能です。
+地図との相互作用:
+BottomSheetを使用すると、地図の操作とBottomSheetの操作を同時に行うことができます。これは、GoogleMap風のインターフェースで重要な機能です1。
+レイアウトの柔軟性:
+BottomSheetは親コンポーネント内に直接レンダリングされるため、地図とBottomSheetの相対的な配置や相互作用をより細かく制御できます1。
+パフォーマンスの最適化:
+常に表示されているBottomSheetは、アプリケーションの他の部分（この場合は地図）と一緒にレンダリングされるため、スムーズな操作感を実現しやすくなります。
+コンテンツの切り替え:
+BottomSheetのコンテンツを動的に変更することで、異なる情報や機能を表示できます。これは、地図上の異なる要素に関する情報を表示する際に便利です。
+地図との連携:
+BottomSheetの状態変化（展開・縮小）に応じて、地図のパディングを調整したり、GoogleMapロゴの位置を動的に変更したりすることができます1。
+実装例：
+kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_maps)
+
+    val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+    mapFragment.getMapAsync(this)
+
+    val bottomSheet = findViewById<LinearLayout>(R.id.bottom_sheet)
+    val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+    bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            // BottomSheetの状態変化に応じて地図の表示を調整
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            // BottomSheetのスライド量に応じて地図のパディングを調整
+            val padding = topLayout.height - bottomSheet.top
+            mMap.setPadding(0, 0, 0, padding)
+        }
+    })
+}
+
+この実装により、GoogleMap風の動的なインターフェースを実現できます。BottomSheetの状態変化に応じて地図の表示を調整し、ユーザーエクスペリエンスを向上させることができます。
+一方、BottomSheetModalは独立したモーダルコンポーネントとして機能するため、GoogleMap風のインターフェースには適していません。常時表示や地図との密接な連携が難しく、ユーザーエクスペリエンスが低下する可能性があります。
+
+navicon.com
+
+webgis.alandis.jp
+
+webgis.alandis.jp
+
+machi-info.jp
+www2.wagmap.jp
+webgis.alandis.jp
+もっと見る
+BottomSheetでScrollが機能するのはSnapPointなん％から？
+ソース
+回答
+BottomSheetでのスクロール機能は、スナップポイントの設定や内容の高さによって変わりますが、一般的には以下のような傾向があります:
+最大スナップポイント:
+通常、最大のスナップポイント（例: "100%"）では常にスクロールが可能です。これは、コンテンツ全体を表示するのに十分なスペースがあるためです。
+中間スナップポイント:
+中間のスナップポイント（例: "50%"や"75%"）では、コンテンツの高さがスナップポイントの高さを超える場合にスクロールが可能になります。
+最小スナップポイント:
+最小のスナップポイント（例: "25%"）では、通常スクロールは無効になります。これは、ユーザーがシートを上にスワイプしてより多くのコンテンツを表示することを期待するためです。
+ただし、スクロールの挙動に関しては、いくつかの問題や制限が報告されています:
+一部のユーザーは、最大スナップポイント以外でスクロールができない問題を報告しています14。
+スクロール可能にするためには、BottomSheetScrollViewコンポーネントを使用する必要があります3。
+スクロールの挙動を改善するために、以下のような対策が提案されています:
+ScrollViewをreact-native-gesture-handlerからインポートして使用する5。
+スクロールビューを新しいViewコンポーネントでラップする5。
+contentContainerStyleからflex: 1を削除する3。
+Android端末で特にスクロールの問題が報告されています5。
+スクロールを確実に機能させるためには、以下の点に注意することが重要です:
+適切なコンポーネント（BottomSheetScrollViewやBottomSheetFlatList）を使用する。
+スナップポイントとコンテンツの高さを適切に設定する。
+必要に応じて、スクロールビューをカスタムViewでラップする。
+また、BottomSheetのバージョンによっても挙動が異なる可能性があるため、最新バージョンを使用し、公式ドキュメントやGitHubのイシューを確認することをおすすめします。
+
+
+github.com
+
+skypack.dev
+
+npmjs.com
+github.com
+github.com
+github.com
+もっと見る
+overDragResistanceFactorってなに？
+ソース
+回答
+overDragResistanceFactorは、BottomSheetコンポーネントの挙動を制御するためのプロパティの1つです。このプロパティは、ユーザーがBottomSheetを最大限まで引き上げた後、さらに上方向にドラッグしようとした際の抵抗力を定義します。
+具体的には：
+定義：
+BottomSheetが最大限まで開いた状態からさらに上方向にドラッグされる際の抵抗力を決定します。
+動作：
+値が大きいほど、オーバードラッグ（最大位置を超えてドラッグすること）に対する抵抗が強くなります。
+デフォルト値：
+通常、デフォルト値は2.5に設定されています。
+設定例：
+javascript
+<BottomSheet
+  overDragResistanceFactor={3}
+  ...
+/>
+
+効果：
+値を小さくすると、ユーザーがBottomSheetを最大位置を超えて引き上げやすくなります。
+値を大きくすると、最大位置を超えてドラッグすることが難しくなります。
+ユーザーエクスペリエンス：
+このプロパティを適切に設定することで、BottomSheetの動きをより自然で直感的にすることができます。ユーザーに対して、Sheetがどこまでドラッグできるかを暗示的に伝えることができます。
+パフォーマンスへの影響：
+このプロパティ自体はパフォーマンスにほとんど影響を与えません。アニメーションの滑らかさは主にReanimatedライブラリによって保証されています。
+overDragResistanceFactorを適切に設定することで、BottomSheetの挙動をアプリケーションの要件やデザインに合わせて微調整することができ、より洗練されたユーザーインターフェースを実現できます。
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+github.com
+github.com
+もっと見る
+detachedのプロップについて教えて
+ソース
+回答
+detachedプロパティは@gorhom/bottom-sheetライブラリのBottomSheetModalコンポーネントで使用される重要なオプションです。以下にその詳細を説明します：
+目的:
+detachedプロパティは、BottomSheetModalを画面の下部から切り離して表示するために使用されます。
+動作:
+detached={true}に設定すると、BottomSheetModalは画面の下部に接触せずに浮いた状態で表示されます。
+detached={false}（デフォルト）では、BottomSheetModalは画面の下部に接触した状態で表示されます。
+視覚的効果:
+有効にすると、BottomSheetModalの周囲に空間が生まれ、より独立したモーダルのように見えます。
+画面の端から少し離れた位置に表示されるため、より目立つデザインになります。
+使用例:
+jsx
+<BottomSheetModal
+  ref={bottomSheetModalRef}
+  snapPoints={snapPoints}
+  detached={true}
+  bottomInset={24}
+  style={styles.sheetContainer}
+>
+  {/* コンテンツ */}
+</BottomSheetModal>
+
+関連プロパティ:
+bottomInset: detachedモードで使用され、画面下部からの距離を指定します。
+style: detachedモードでの外観をカスタマイズするのに使用できます（例：角丸、影など）。
+ユースケース:
+より独立したモーダル感を出したい場合
+画面の他の要素と視覚的に分離したい場合
+特定のデザインガイドラインに従う必要がある場合
+注意点:
+detached={true}を使用する場合、適切なbottomInset値を設定して、BottomSheetModalが画面の下部に十分な余白を持つようにすることが重要です。
+detachedプロパティを使用することで、より柔軟でカスタマイズされたBottomSheetModalのデザインを実現できます。特に、GoogleマップのようなUIを実装する場合、このプロパティは非常に有用です。
+
+github.com
+
+github.com
+
+themorrow.digital
+
+fort-gs.com
+github.com
+countertokyo.com
+もっと見る
+youtube.com
+見る
+Video Preview
+enableContentPanningGestureについて教えて
+ソース
+回答
+enableContentPanningGestureは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。このプロパティについて、以下の重要なポイントを説明します：
+目的:
+このプロパティは、BottomSheetのコンテンツ領域でのパンニングジェスチャー（指でドラッグする動作）を有効または無効にするために使用されます。
+デフォルト値:
+デフォルトではtrueに設定されています。
+動作:
+trueの場合：ユーザーはコンテンツ領域をドラッグしてBottomSheetを開閉できます。
+falseの場合：コンテンツ領域でのパンニングジェスチャーが無効になり、BottomSheetの開閉ができなくなります。
+使用例:
+jsx
+<BottomSheet
+  enableContentPanningGesture={false}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+注意点:
+このプロパティをfalseに設定すると、BottomSheetScrollViewなどのスクロール可能なコンポーネントの動作に影響を与える可能性があります12。
+スクロール可能なコンテンツを含むBottomSheetでfalseに設定すると、スクロールが正常に機能しない問題が報告されています。
+代替案:
+スクロール可能なコンテンツを使用する場合は、enableContentPanningGestureをtrueのままにし、代わりにenablePanDownToCloseプロパティを使用してBottomSheetの閉じる動作を制御することができます。
+バグ報告:
+このプロパティをfalseに設定した際のスクロールの問題については、GitHubのissueで報告されており、開発者の注目を集めています2。
+enableContentPanningGestureの使用には注意が必要で、特にスクロール可能なコンテンツを含むBottomSheetを実装する場合は、この設定がユーザーエクスペリエンスに与える影響を十分に考慮する必要があります。
+
+github.com
+
+github.com
+
+github.com
+
+reactscript.com
+enableHandlePanningGestureについて教えて
+ソース
+回答
+enableHandlePanningGestureは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。このプロパティについて、以下の重要なポイントを説明します：
+目的:
+このプロパティは、BottomSheetのハンドル部分でのパンニングジェスチャー（ドラッグ操作）を有効または無効にするために使用されます。
+デフォルト値:
+デフォルトではtrueに設定されています。
+動作:
+trueの場合：ユーザーはBottomSheetのハンドル部分をドラッグしてシートを開閉できます。
+falseの場合：ハンドル部分でのパンニングジェスチャーが無効になり、ハンドルをドラッグしてのシートの開閉ができなくなります。
+使用例:
+jsx
+<BottomSheet
+  enableHandlePanningGesture={false}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+ユースケース:
+ハンドル部分でのジェスチャー操作を無効にしたい場合（例：カスタムのヘッダーコンポーネントを使用する場合）
+シートの開閉を特定のボタンやアクションのみに制限したい場合
+関連プロパティ:
+enableContentPanningGesture: コンテンツ領域でのパンニングジェスチャーを制御します。
+enablePanDownToClose: 下方向へのパンニングでシートを閉じる機能を制御します。
+注意点:
+このプロパティをfalseに設定すると、ユーザーはハンドル部分をドラッグしてシートを操作できなくなるため、他の方法でシートを操作できるようにする必要があります（例：ボタンやプログラムによる制御）。
+enableHandlePanningGestureを適切に使用することで、BottomSheetの操作性をカスタマイズし、特定のユースケースやデザイン要件に合わせたインターフェースを実現できます。ただし、ユーザーエクスペリエンスへの影響を考慮し、慎重に設定する必要があります。
+
+github.com
+
+m2.material.io
+
+taskito.io
+
+engineering.mercari.com
+
+github.com
+enableOverDragについて教えて
+ソース
+回答
+enableOverDragは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。このプロパティについて、以下の重要なポイントを説明します：
+目的:
+このプロパティは、BottomSheetの「オーバードラッグ」機能を有効または無効にするために使用されます。オーバードラッグとは、ユーザーがシートを最大の高さ以上にドラッグできる機能のことです。
+デフォルト値:
+デフォルトではtrueに設定されています。
+動作:
+trueの場合：ユーザーはBottomSheetを最大の高さ以上にドラッグでき、放すとバウンス効果で元の位置に戻ります。
+falseの場合：BottomSheetは最大の高さで止まり、それ以上ドラッグできません。
+使用例:
+jsx
+<BottomSheet
+  enableOverDrag={false}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+ユーザーエクスペリエンス:
+オーバードラッグを有効にすると、より自然で流動的な操作感を提供できます。
+無効にすると、シートの動きがより制限され、正確な位置で停止します。
+関連プロパティ:
+overDragResistanceFactor: オーバードラッグの抵抗力を調整します。
+注意点:
+オーバードラッグを無効にすると、ユーザーの操作感が変わる可能性があるため、UIの一貫性を考慮して設定する必要があります。
+enableOverDragを適切に使用することで、BottomSheetの動作をアプリケーションの要件やデザインに合わせてカスタマイズできます。ユーザーの操作感と視覚的なフィードバックのバランスを考慮して設定することが重要です。
+
+jpazureid.github.io
+
+blogs.manageengine.jp
+
+jpazureid.github.io
+
+qiita.com
+ddbj.nig.ac.jp
+learn.microsoft.com
+xtech.nikkei.com
+もっと見る
+enablePanDownToCloseについて教えて
+ソース
+回答
+enablePanDownToCloseは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用される重要なプロパティです。このプロパティについて、以下の主要なポイントを説明します：
+目的:
+このプロパティは、ユーザーが下方向へのパンニングジェスチャー（下にスワイプする動作）でBottomSheetを閉じることができるかどうかを制御します。
+デフォルト値:
+通常、デフォルトではtrueに設定されています。
+動作:
+trueの場合：ユーザーは下方向へのスワイプでBottomSheetを閉じることができます。
+falseの場合：下方向へのスワイプでBottomSheetを閉じることができなくなります。
+使用例:
+jsx
+<BottomSheet
+  enablePanDownToClose={false}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+注意点:
+backdropComponentを使用している場合、enablePanDownToCloseが正常に機能しない問題が報告されています12。
+この問題を解決するには、backdropComponentの代わりに別の方法でバックドロップを実装するか、カスタムのクローズロジックを実装する必要があるかもしれません。
+関連プロパティ:
+enableContentPanningGesture: コンテンツ領域でのパンニングジェスチャーを制御します。
+enableHandlePanningGesture: ハンドル部分でのパンニングジェスチャーを制御します。
+ユースケース:
+ユーザーがBottomSheetを誤って閉じてしまうのを防ぎたい場合にfalseに設定します。
+特定のボタンやアクションでのみBottomSheetを閉じたい場合に使用します。
+enablePanDownToCloseを適切に使用することで、BottomSheetの操作性をカスタマイズし、アプリケーションの要件に合わせたユーザーエクスペリエンスを提供できます。ただし、backdropComponentとの互換性の問題に注意が必要です。
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+github.com
+github.com
+もっと見る
+enableDynamicSizingについて教えて
+ソース
+回答
+enableDynamicSizingは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用される重要なプロパティです。このプロパティについて、以下の主要なポイントを説明します：
+目的:
+このプロパティは、BottomSheetの高さをコンテンツの実際のサイズに基づいて動的に調整することを可能にします。
+動作:
+trueの場合：BottomSheetの高さはコンテンツの高さに応じて自動的に調整されます。
+falseの場合（デフォルト）：BottomSheetの高さは指定されたスナップポイントに基づいて固定されます。
+使用例:
+jsx
+<BottomSheet
+  enableDynamicSizing={true}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+注意点:
+このプロパティは完全に安定しているわけではなく、一部のユーザーから問題が報告されています14。
+コンテンツの高さが変更された際に、再計算が正しく行われない場合があります4。
+特定のケースでは、最初の2-3回は機能するが、その後機能しなくなるという報告もあります4。
+対処法:
+コンテンツをBottomSheetViewでラップすることで問題が解決する場合があります4。
+余分なラッパーを削除することで機能する場合もあります4。
+関連する問題:
+キーボードが開いた際にBottomSheetが全画面サイズに拡大してしまう問題が報告されています4。
+代替案:
+問題が解決しない場合、従来のsnapPointsを使用する方法に戻ることを検討する必要があるかもしれません4。
+enableDynamicSizingは便利な機能ですが、現在のバージョンでは完全に安定しているとは言えません。使用する際は、これらの潜在的な問題を考慮し、必要に応じて代替策を検討することが重要です。また、ライブラリの最新バージョンを使用し、GitHubのイシューを確認して最新の情報を得ることをおすすめします。
+
+github.com
+
+github.com
+
+github.com
+github.com
+もっと見る
+animateOnMountについて教えて
+ソース
+回答
+animateOnMountは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。このプロパティについて、以下の主要なポイントを説明します：
+目的:
+このプロパティは、BottomSheetが最初にマウントされた際のアニメーション動作を制御します。
+デフォルト値:
+デフォルトではtrueに設定されています。
+動作:
+trueの場合：BottomSheetは最初に閉じた状態でマウントされ、レイアウトが計算された後に初期のスナップポイントインデックスまでアニメーションで開きます。
+falseの場合：BottomSheetは初期のスナップポイントインデックスの位置で即座に表示されます（アニメーションなし）。
+使用例:
+jsx
+<BottomSheet
+  animateOnMount={true}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+ユースケース:
+アプリの起動時やページ遷移時に、BottomSheetをスムーズに表示したい場合に使用します。
+ユーザーの注意を引きつけたい場合や、UIの変化を自然に見せたい場合に有効です。
+パフォーマンスへの影響:
+trueに設定すると、初期表示時にアニメーションが実行されるため、わずかにパフォーマンスに影響を与える可能性があります。
+パフォーマンスが重要な場合は、falseに設定することで即座に表示させることができます。
+注意点:
+このプロパティは、BottomSheetの初回マウント時にのみ影響します。その後の表示/非表示の動作には影響しません。
+animateOnMountプロパティを適切に使用することで、アプリケーションの起動時やページ遷移時のユーザーエクスペリエンスを向上させることができます。ただし、アプリケーションの要件やパフォーマンスの考慮事項に基づいて、このプロパティの値を選択することが重要です。
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+github.com
+github.com
+もっと見る
+overrideReduceMotionについて教えて
+ソース
+回答
+overrideReduceMotionは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。このプロパティについて、以下の主要なポイントを説明します：
+目的:
+このプロパティは、デバイスの「モーション軽減」設定を無視して、BottomSheetのアニメーションを強制的に有効にするために使用されます。
+デフォルト値:
+デフォルトではfalseに設定されています。
+動作:
+falseの場合：デバイスの「モーション軽減」設定に従います。
+trueの場合：デバイスの「モーション軽減」設定を無視し、常にアニメーションを有効にします。
+使用例:
+jsx
+<BottomSheet
+  overrideReduceMotion={true}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+ユースケース:
+アプリケーションのUXにとってアニメーションが重要な場合に使用します。
+ユーザーのデバイス設定に関わらず、一貫したアニメーション体験を提供したい場合に有効です。
+アクセシビリティへの影響:
+このプロパティをtrueに設定すると、モーション感受性の高いユーザーにとっては問題となる可能性があります。
+アクセシビリティを考慮する場合は、慎重に使用する必要があります。
+パフォーマンスへの影響:
+アニメーションを強制的に有効にすることで、デバイスのパフォーマンスに影響を与える可能性があります。
+overrideReduceMotionプロパティを使用する際は、ユーザーエクスペリエンスとアクセシビリティのバランスを慎重に検討することが重要です。アプリケーションの要件や対象ユーザーに応じて、適切に設定を行うべきです。
+
+backgroundStyleについて教えて
+ソース
+回答
+backgroundStyleは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、BottomSheetの背景スタイルをカスタマイズするために使用されます。以下に主要なポイントをまとめます：
+目的:
+BottomSheetの背景のスタイルを変更するために使用されます。
+型:
+ViewStyle型（React NativeのStyleSheet.ViewStyle）を受け取ります。
+使用例:
+jsx
+<BottomSheet
+  backgroundStyle={{
+    backgroundColor: '#1C1C1E',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  }}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+カスタマイズ可能な要素:
+背景色
+ボーダーラジウス
+シャドウ
+その他のViewStyleプロパティ
+注意点:
+backgroundComponentプロパティと併用する場合、backgroundStyleは無視される可能性があります。
+透明な背景の作成:
+完全に透明な背景を作成するには、以下のように設定します：
+jsx
+backgroundStyle={{ backgroundColor: 'transparent' }}
+
+組み合わせ:
+handleStyleやhandleIndicatorStyleなどの他のスタイルプロパティと組み合わせて使用することで、BottomSheetの全体的な外観をカスタマイズできます。
+動的なスタイリング:
+状態に応じてbackgroundStyleを動的に変更することも可能です。
+backgroundStyleを適切に使用することで、アプリケーションのデザインに合わせてBottomSheetの外観をカスタマイズし、より統一感のあるUIを作成することができます。
+
+github.com
+
+github.com
+
+andreadams.com.br
+designsystem.line.me
+github.com
+もっと見る
+Styleとの違いは？
+ソース
+回答
+backgroundStyleとstyleは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用される異なるスタイリングプロパティです。主な違いは以下の通りです：
+適用対象:
+backgroundStyle: BottomSheetの背景コンポーネントにのみ適用されます。
+style: BottomSheetのコンテナ全体に適用されます。
+用途:
+backgroundStyle: 背景色、ボーダーラジウス、透明度など、背景に関する特定のスタイルを設定します。
+style: シャドウ、マージン、パディングなど、BottomSheet全体のレイアウトやスタイリングに使用されます。
+型:
+backgroundStyle: ViewStyle型を受け取ります。
+style: ViewStyle | AnimatedStyle型を受け取ります。アニメーションスタイルも適用可能です。
+優先順位:
+backgroundStyleはbackgroundComponentプロパティが設定されている場合、無視される可能性があります。
+styleは常に適用されます。
+使用例:
+jsx
+<BottomSheet
+  style={{
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  }}
+  backgroundStyle={{
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  }}
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+これらの違いを理解することで、BottomSheetの外観をより細かくカスタマイズすることができます。backgroundStyleで背景の見た目を調整し、styleでBottomSheet全体のレイアウトや視覚効果を制御するという使い分けが可能です。
+
+stackoverflow.com
+
+handleStyleについて教えて
+ソース
+回答
+handleStyleは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、BottomSheetのハンドル部分のスタイルをカスタマイズするために使用されます。以下に主要なポイントをまとめます：
+目的:
+BottomSheetの上部にあるハンドル（通常は小さな横線）のスタイルを変更するために使用されます。
+型:
+ViewStyle型（React NativeのStyleSheet.ViewStyle）を受け取ります。
+使用例:
+jsx
+<BottomSheet
+  handleStyle={{
+    backgroundColor: '#00000030',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  }}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+カスタマイズ可能な要素:
+背景色
+ボーダーラジウス
+幅
+高さ
+マージン
+その他のViewStyleプロパティ
+注意点:
+handleComponentプロパティを使用してカスタムハンドルコンポーネントを提供する場合、handleStyleは無視されます。
+関連プロパティ:
+handleIndicatorStyle: ハンドル内のインジケーター（通常は小さな横線）のスタイルをカスタマイズします。
+動的なスタイリング:
+状態に応じてhandleStyleを動的に変更することも可能です。
+handleStyleを適切に使用することで、BottomSheetの外観をアプリケーションのデザインに合わせてカスタマイズし、より統一感のあるUIを作成することができます。ハンドル部分は小さな要素ですが、ユーザーの注目を集めやすい部分であるため、適切にスタイリングすることでUXを向上させることができます。
+
+github.com
+
+github.com
+
+containerHeightについて教えて
+ソース
+回答
+containerHeightは、@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティではありません。しかし、BottomSheetの高さを制御するための一般的な方法について説明します：
+snapPoints:
+BottomSheetの高さを制御する主要な方法はsnapPointsプロパティを使用することです。
+jsx
+<BottomSheet
+  snapPoints={['25%', '50%', '75%']}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+これにより、BottomSheetは指定された高さ（画面の25%、50%、75%）にスナップします。
+dynamicSnapPoints:
+コンテンツの高さに基づいて動的にSnapPointsを設定できます。
+jsx
+<BottomSheet
+  enableDynamicSizing={true}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+カスタムコンテナ:
+BottomSheet内にカスタムコンテナを配置し、その高さを制御することができます。
+jsx
+<BottomSheet>
+  <View style={{ height: containerHeight }}>
+    {/* コンテンツ */}
+  </View>
+</BottomSheet>
+
+ここでcontainerHeightは、状態変数やプロップとして管理できます。
+contentHeight:
+コンテンツの高さを動的に計算し、それに基づいてBottomSheetの高さを調整することもできます。
+jsx
+const [contentHeight, setContentHeight] = useState(0);
+
+<BottomSheet snapPoints={[contentHeight]}>
+  <View
+    onLayout={(event) => {
+      const { height } = event.nativeEvent.layout;
+      setContentHeight(height);
+    }}
+  >
+    {/* コンテンツ */}
+  </View>
+</BottomSheet>
+
+BottomSheetの高さを制御する際は、ユーザーエクスペリエンスとパフォーマンスを考慮し、適切な方法を選択することが重要です。動的な高さ調整が必要な場合は、enableDynamicSizingプロパティの使用を検討してください。
+
+github.com
+
+composeunstyled.com
+
+punitd.dev
+
+github.com
+composables.com
+betterprogramming.pub
+もっと見る
+containerOffsetについて教えて
+ソース
+回答
+containerOffsetは@gorhom/react-native-bottom-sheetライブラリのBottomSheetコンポーネントの内部で使用される重要な値です。以下にその主要なポイントをまとめます：
+目的:
+containerOffsetは、BottomSheetコンテナの位置情報を保持するために使用されます。具体的には、画面上でのBottomSheetの上端、左端、右端、下端の位置を表します。
+構造:
+通常、以下のような形式のオブジェクトです：
+javascript
+{
+  top: number,
+  left: number,
+  right: number,
+  bottom: number
+}
+
+使用場面:
+BottomSheetの位置計算
+アニメーションの制御
+タッチイベントの処理
+更新タイミング:
+containerOffsetは通常、BottomSheetコンテナのレイアウトが変更されたときに更新されます。これはhandleContainerLayout関数内で行われます。
+注意点:
+検索結果1で示されているように、アプリの再起動時などにcontainerOffsetが正しく初期化されない問題が報告されています。
+この問題を回避するために、containerOffsetの値が存在するかどうかを確認してから操作を行うことが推奨されています。
+改善案:
+検索結果1では、以下のような改善案が提案されています：
+javascript
+if (!containerOffset.value) return;
+containerOffset.value = {
+  top: pageY,
+  left: 0,
+  right: 0,
+  bottom: Math.max(0, WINDOW_HEIGHT - (pageY + height + (StatusBar.currentHeight ?? 0))),
+};
+
+開発者の観点:
+containerOffsetは内部で使用される値であり、通常、開発者が直接操作する必要はありません。ただし、カスタムの動作やアニメーションを実装する際には、この値を考慮する必要がある場合があります。
+containerOffsetは、BottomSheetの正確な位置制御とアニメーションの滑らかさを確保するために重要な役割を果たしています。ライブラリの内部実装に深く関わる部分であるため、直接操作する際は注意が必要です。
+
+github.com
+
+github.com
+
+kikuragechan.com
+
+github.com
+
+topInsetについて教えて
+ソース
+回答
+topInsetは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。以下にその主要なポイントをまとめます：
+目的:
+BottomSheetコンテナの上部に追加する余白（インセット）を指定します。
+型:
+数値型（number）を受け取ります。
+デフォルト値:
+0
+使用例:
+jsx
+<BottomSheet
+  topInset={50}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+主な用途:
+ナビゲーションバーやステータスバーの高さを考慮してBottomSheetの位置を調整する。
+@react-navigation/stackのuseHeaderHeightフックやreact-native-safe-area-contextのuseSafeAreaフックから得られる値をここに設定することが多い。
+効果:
+BottomSheetの上端が指定された値だけ下がります。
+パーセンテージベースのスナップポイントの計算に影響を与えます。
+注意点:
+この値を設定すると、BottomSheetの実際の表示可能領域が減少します。
+デバイスの種類やアプリのレイアウトによって適切な値が変わる可能性があります。
+topInsetを適切に使用することで、ナビゲーションバーやステータスバーとBottomSheetが重ならないようにし、より良いユーザーエクスペリエンスを提供することができます。特に、異なるデバイスや画面サイズに対応する際に重要なプロパティとなります。
+
+
+github.com
+
+github.com
+bottomInsetについて教えて
+ソース
+回答
+bottomInsetは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。以下にその主要なポイントをまとめます：
+目的:
+BottomSheetコンテナの下部に追加する余白（インセット）を指定します。
+型:
+数値型（number）を受け取ります。
+デフォルト値:
+0
+使用例:
+jsx
+<BottomSheet
+  bottomInset={34}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+主な用途:
+ホームインジケーターやナビゲーションバーの高さを考慮してBottomSheetの位置を調整する。
+react-native-safe-area-contextのuseSafeAreaフックから得られるbottomの値をここに設定することが多い。
+効果:
+BottomSheetの下端が指定された値だけ上がります。
+これにより、BottomSheetがホームインジケーターやナビゲーションバーと重ならないようにできます。
+注意点:
+この値を設定すると、BottomSheetの実際の表示可能領域が減少します。
+デバイスの種類やアプリのレイアウトによって適切な値が変わる可能性があります。
+topInsetとの違い:
+topInsetがBottomSheetの上部の余白を制御するのに対し、bottomInsetは下部の余白を制御します。
+bottomInsetを適切に使用することで、BottomSheetがデバイスの物理的な特徴（ホームインジケーターなど）と干渉しないようにし、より良いユーザーエクスペリエンスを提供することができます。特に、異なるデバイスや画面サイズに対応する際に重要なプロパティとなります。
+
+github.com
+
+github.com
+
+ignitecookbook.com
+maxDynamicContentSizeについて教えて
+ソース
+回答
+maxDynamicContentSizeは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティです。以下にその主要なポイントをまとめます：
+目的:
+動的なコンテンツサイズの最大高さを制限し、BottomSheetの高さが指定されたサイズを超えないようにします。
+型:
+数値型（number）を受け取ります。
+デフォルト値:
+コンテナの高さ（container height）
+使用例:
+jsx
+<BottomSheet
+  enableDynamicSizing={true}
+  maxDynamicContentSize={500}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+動作:
+enableDynamicSizingがtrueの場合に効果を発揮します。
+コンテンツの高さがmaxDynamicContentSizeを超えた場合、BottomSheetの高さはこの値に制限されます。
+主な用途:
+動的なコンテンツを持つBottomSheetで、最大高さを制御したい場合に使用します。
+ユーザーエクスペリエンスを考慮して、BottomSheetが画面全体を覆わないようにする場合に有用です。
+注意点:
+この値はenableDynamicSizingがtrueの場合にのみ効果があります。
+コンテナの高さよりも大きな値を設定しても、実際のBottomSheetの高さはコンテナの高さを超えることはありません。
+関連プロパティ:
+enableDynamicSizing: 動的サイジングを有効にするプロパティ
+snapPoints: 固定のスナップポイントを設定するプロパティ
+maxDynamicContentSizeを適切に使用することで、動的なコンテンツを持つBottomSheetの最大高さを制御し、より良いユーザーエクスペリエンスを提供することができます。特に、コンテンツの量が予測できない場合や、BottomSheetが画面全体を覆わないようにしたい場合に有用です。
+
+youtube.com
+youtube.com
+Watch
+
+galaxies.dev
+
+github.com
+
+appcoda.com
+npmjs.com
+stackoverflow.com
+もっと見る
+keyboardBehaviorについて教えて
+ソース
+回答
+keyboardBehaviorは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、キーボードが表示されたときのBottomSheetの動作を制御します。以下にその主要なポイントをまとめます：
+目的:
+キーボードが表示されたときのBottomSheetの挙動を定義します。
+型:
+文字列型で、以下の値のいずれかを取ります：
+'interactive'（デフォルト）
+'extend'
+'fillParent'
+オプションの説明:
+'interactive': BottomSheetはキーボードの上に表示され、ユーザーはシートとキーボードの両方を操作できます。
+'extend': キーボードが表示されると、BottomSheetは自動的に最大高さまで拡張されます。
+'fillParent': キーボードが表示されると、BottomSheetは利用可能な画面スペース全体を埋めます。
+使用例:
+jsx
+<BottomSheet
+  keyboardBehavior="extend"
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+注意点:
+このプロパティは、BottomSheet内でテキスト入力を使用する場合に特に重要です。
+'interactive'モードでは、BottomSheetTextInputコンポーネントを使用することが推奨されています。
+関連プロパティ:
+keyboardBlurBehavior: キーボードが非表示になったときのBottomSheetの動作を制御します。
+android_keyboardInputMode: Androidデバイスでのキーボード入力モードを指定します。
+プラットフォーム特有の動作:
+iOSとAndroidでは挙動が若干異なる場合があるため、両プラットフォームでのテストが推奨されます。
+keyboardBehaviorを適切に設定することで、キーボードが表示されたときのユーザーエクスペリエンスを向上させることができます。特に、フォームやチャットインターフェースなど、テキスト入力を含むBottomSheetを実装する際に重要なプロパティです。
+
+github.com
+
+github.com
+
+stackoverflow.com
+
+github.com
+gorhom.dev
+github.com
+もっと見る
+keyboardBlurBehaviorについて教えて
+ソース
+回答
+keyboardBlurBehaviorは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、キーボードが非表示になったときのBottomSheetの動作を制御します。以下にその主要なポイントをまとめます：
+目的:
+キーボードが非表示になったときのBottomSheetの挙動を定義します。
+型:
+文字列型で、以下の値のいずれかを取ります：
+'none'（デフォルト）
+'restore'
+オプションの説明:
+'none': キーボードが非表示になっても、BottomSheetの位置は変更されません。
+'restore': キーボードが非表示になると、BottomSheetは元の位置（キーボードが表示される前の位置）に戻ります。
+使用例:
+jsx
+<BottomSheet
+  keyboardBlurBehavior="restore"
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+注意点:
+このプロパティは、keyboardBehaviorプロパティと組み合わせて使用されることが多いです。
+'restore'オプションは、ユーザーがキーボードを閉じた後にBottomSheetの位置を元に戻したい場合に特に有用です。
+関連する問題:
+一部のバージョンで'restore'オプションが正しく機能しない問題が報告されています3。
+これらの問題は最新バージョンで修正されている可能性が高いですが、使用する前に最新の情報を確認することをお勧めします。
+ユーザーエクスペリエンスへの影響:
+適切に設定することで、キーボードの表示/非表示に伴うBottomSheetの動作をよりスムーズにし、ユーザーエクスペリエンスを向上させることができます。
+keyboardBlurBehaviorを適切に設定することで、キーボードが非表示になったときのBottomSheetの動作を制御し、アプリケーションの要件に合わせたユーザーエクスペリエンスを提供することができます。特に、フォームやチャットインターフェースなど、テキスト入力を含むBottomSheetを実装する際に重要なプロパティです。
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+animationConfigsについて教えて
+ソース
+回答
+animationConfigsは@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、BottomSheetのアニメーション動作をカスタマイズするために使用されます。以下にその主要なポイントをまとめます：
+目的:
+BottomSheetの開閉やスナップ時のアニメーション挙動を細かく制御します。
+型:
+Animated.WithSpringConfig または Animated.WithTimingConfig 型のオブジェクトを受け取ります。
+主な設定可能なパラメータ:
+duration: アニメーションの持続時間（ミリ秒）
+easing: イージング関数（例: Easing.inOut(Easing.ease)）
+damping: スプリングアニメーションの減衰係数
+mass: スプリングアニメーションの質量
+stiffness: スプリングアニメーションの剛性
+overshootClamping: オーバーシュートを制限するかどうか
+restDisplacementThreshold: 静止状態とみなす変位のしきい値
+restSpeedThreshold: 静止状態とみなす速度のしきい値
+使用例:
+jsx
+<BottomSheet
+  animationConfigs={{
+    duration: 300,
+    easing: Easing.inOut(Easing.ease),
+  }}
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+デフォルト値:
+ライブラリ内部で定義されたデフォルト設定が使用されます。
+動的な変更:
+アニメーション設定を動的に変更することも可能です。
+パフォーマンスへの影響:
+適切に設定することで、スムーズなアニメーションを実現できますが、過度に複雑な設定はパフォーマンスに影響を与える可能性があります。
+プラットフォーム特有の考慮事項:
+iOSとAndroidで最適な設定が異なる場合があるため、両プラットフォームでのテストが推奨されます。
+注意点:
+reduceMotionオプションを使用して、デバイスの設定に応じてアニメーションを調整できます2。
+animationConfigsを適切に設定することで、BottomSheetの動きをよりスムーズにし、アプリケーションの要件に合わせたユーザーエクスペリエンスを提供することができます。ただし、過度に複雑な設定は避け、ユーザビリティとパフォーマンスのバランスを考慮することが重要です。
+
+github.com
+
+github.com
+
+github.com
+github.com
+github.com
+github.com
+もっと見る
+waitForについて教えて
+ソース
+回答
+waitForは、React Native Reanimatedライブラリにおいて、特定のアニメーションやジェスチャーの完了を待つための関数です。この関数は、特に複数のアニメーションやジェスチャーが同時に発生する場合に、あるアニメーションが完了するまで次の処理を遅延させるために使用されます。
+主なポイント
+目的:
+waitForは、指定されたアニメーションやジェスチャーが完了するのを待ってから次の処理を実行するために使用されます。これにより、アニメーションの整合性を保ち、ユーザーエクスペリエンスを向上させることができます。
+使用方法:
+waitForは、通常、GestureHandlerと組み合わせて使用されます。例えば、パンジェスチャーが発生している間は他のジェスチャーを無効にすることができます。
+例:
+javascript
+import { GestureDetector, GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import Animated, { useSharedValue, withSpring, waitFor } from 'react-native-reanimated';
+
+const MyComponent = () => {
+  const translateX = useSharedValue(0);
+
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      // 何か処理
+    })
+    .onUpdate((event) => {
+      translateX.value = event.translationX;
+    });
+
+  return (
+    <GestureHandlerRootView>
+      <GestureDetector gesture={panGesture}>
+        <Animated.View style={{ transform: [{ translateX: translateX.value }] }}>
+          {/* コンテンツ */}
+        </Animated.View>
+      </GestureDetector>
+    </GestureHandlerRootView>
+  );
+};
+
+注意点:
+waitForは、他のアニメーションやジェスチャーとの相互作用を管理するために非常に便利ですが、適切に使用しないとユーザーインターフェースが遅延したり、反応が鈍く感じられることがあります。
+複雑なアニメーションやジェスチャーの組み合わせでは、十分なテストを行い、期待通りに動作することを確認する必要があります。
+関連プロパティ:
+withTimingやwithSpringなどのアニメーション関数と組み合わせて使うことで、より滑らかなアニメーション体験を提供できます。
+結論
+waitForは、React Native Reanimatedでのアニメーションやジェスチャー管理において重要な役割を果たします。これを活用することで、複雑なインタラクションでも整合性のある動作を実現し、ユーザー体験を向上させることができます。
+simultaneousHandlersについて教えて
+ソース
+回答
+simultaneousHandlersは、@gorhom/bottom-sheetライブラリとReact Native Gesture Handlerで使用されるプロパティで、複数のジェスチャーハンドラーが同時にアクティブになることを許可します。以下にその主要なポイントをまとめます：
+目的:
+simultaneousHandlersは、特定のジェスチャーハンドラーが他のハンドラーと同時にアクティブになることを可能にし、複雑なジェスチャー操作をサポートします。
+型:
+React.RefまたはReact.Ref[]（配列）を受け取ります。
+デフォルト動作:
+デフォルトでは、1つのジェスチャーハンドラーのみがアクティブ状態になれるため、他のハンドラーはキャンセルされます。simultaneousHandlersを使用することで、この動作を変更できます。
+使用例:
+javascript
+import { PinchGestureHandler, PanGestureHandler } from 'react-native-gesture-handler';
+
+const MyComponent = () => {
+  const panRef = React.createRef();
+  const pinchRef = React.createRef();
+
+  return (
+    <PanGestureHandler
+      ref={panRef}
+      simultaneousHandlers={pinchRef}
+      onGestureEvent={onPanGestureEvent}
+    >
+      <PinchGestureHandler
+        ref={pinchRef}
+        simultaneousHandlers={panRef}
+        onGestureEvent={onPinchGestureEvent}
+      >
+        <Animated.View>
+          {/* コンテンツ */}
+        </Animated.View>
+      </PinchGestureHandler>
+    </PanGestureHandler>
+  );
+};
+
+ユースケース:
+画像のズームや回転、パン操作など、複数のジェスチャーを同時に認識する必要がある場合に特に有用です。
+例えば、写真プレビューコンポーネントで、ピンチでズームしながら回転やパンを行う場合に使用されます。
+注意点:
+simultaneousHandlersを設定することで、複数のハンドラーが同時にアクティブになれるようになりますが、これによって意図しない動作が発生する可能性もあるため、十分なテストが必要です。
+一部のシナリオでは、simultaneousHandlersが期待通りに機能しないことがあります。特に、他のハンドラーとの競合や状態管理に注意が必要です。
+関連プロパティ:
+waitFor: 他のハンドラーの完了を待つために使用されるプロパティで、simultaneousHandlersと組み合わせて使用されることがあります。
+simultaneousHandlersを適切に使用することで、ユーザーインターフェースでの複雑なジェスチャー操作をよりスムーズに実装できるようになります。特に、インタラクティブなコンポーネントやアプリケーションで重要な役割を果たします。
+
+github.com
+
+github.com
+
+docs.swmansion.com
+github.com
+もっと見る
+activeOffsetXについて教えて
+ソース
+回答
+activeOffsetXは、@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントで使用されるプロパティで、横方向のスワイプジェスチャーの感度を制御します。このプロパティは、特にパンジェスチャーを使用する際に重要です。
+主なポイント
+目的:
+activeOffsetXは、横方向のスワイプが認識されるために必要な最小のオフセット（移動量）を指定します。これにより、ユーザーが意図しないスワイプ操作を防ぎ、より直感的な操作感を提供します。
+型:
+数値型（number）を受け取ります。これが示すのは、スワイプが有効になるための最小移動量です。
+使用例:
+javascript
+<BottomSheet
+  activeOffsetX={[-10, 10]} // 左右それぞれ10ピクセルのオフセット
+  ...
+>
+  {/* コンテンツ */}
+</BottomSheet>
+
+設定方法:
+配列として設定することも可能で、例えば[-10, 10]と設定すると、左方向に10ピクセル以上移動した場合、または右方向に10ピクセル以上移動した場合にスワイプが有効になります。
+主な用途:
+スワイプダウンでBottomSheetを閉じる機能を持たせつつ、左右へのスワイプ操作を許可する場合に便利です。
+他のジェスチャーとの競合を避けるためにも使用されます。
+注意点:
+activeOffsetXを適切に設定しないと、意図しない動作やユーザーエクスペリエンスの低下につながる可能性があります。
+特に複数のジェスチャーハンドラーが存在する場合は、他のハンドラーとの相互作用を考慮する必要があります。
+関連プロパティ:
+failOffsetX: スワイプが失敗するためのオフセット値を指定します。
+activeOffsetY: 縦方向のオフセットを制御します。
+activeOffsetXを適切に設定することで、BottomSheetの操作性やユーザーインターフェースの直感性を向上させることができます。特に、複雑なインタラクションやジェスチャー操作が必要なアプリケーションで重要な役割を果たします。
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+
+gestureEventsHandlersHookについて教えて
+ソース
+回答
+gestureEventsHandlersHookは、@gorhom/bottom-sheetライブラリにおいて、カスタムのパンジェスチャーイベントハンドラーを提供するためのフックです。このプロパティを使用することで、ユーザーがBottomSheetを操作する際のジェスチャー処理を高度にカスタマイズできます。
+主なポイント
+目的:
+gestureEventsHandlersHookは、BottomSheetのパンジェスチャーに対するイベントハンドリングをカスタマイズするための手段を提供します。これにより、特定の動作（例：ハプティックフィードバック）やアニメーションのトリガーなどを実装できます。
+型:
+GestureEventsHandlersHookTypeを受け取ります。デフォルトではuseGestureEventsHandlersDefaultが使用されます。
+使用例:
+javascript
+import { gestureEventsHandlersHook } from '@gorhom/bottom-sheet';
+
+const MyComponent = () => {
+  const customGestureHandler = gestureEventsHandlersHook();
+
+  return (
+    <BottomSheet
+      gestureEventsHandlersHook={customGestureHandler}
+      ...
+    >
+      {/* コンテンツ */}
+    </BottomSheet>
+  );
+};
+
+ユースケース:
+ユーザーがBottomSheetをドラッグしたときにハプティックフィードバックを提供したり、特定の条件下でアニメーションをトリガーしたりする場合に役立ちます。
+注意点:
+現在、この機能は実験的であり、フックのシグネチャはメジャーバージョンアップなしに変更される可能性があります。そのため、使用する際には最新のドキュメントを確認し、将来的な変更に備える必要があります。
+関連プロパティ:
+他のジェスチャー関連プロパティ（例：simultaneousHandlers, waitForなど）と組み合わせて使用することで、複雑なジェスチャー操作を実現できます。
+結論
+gestureEventsHandlersHookは、@gorhom/bottom-sheetライブラリでのパンジェスチャー処理をカスタマイズするための強力なツールです。これを活用することで、ユーザーエクスペリエンスを向上させるための柔軟なインタラクション設計が可能になります。ただし、実験的な機能であるため、将来的な変更に注意が必要です。
+
+
+docs.swmansion.com
+
+blog.bitsrc.io
+
+docs.swmansion.com
+childrenPropについて教えて
+ソース
+回答
+childrenPropは、Reactコンポーネントにおいて、子要素を受け取るためのプロパティです。このプロパティは、コンポーネント内で他のコンポーネントや要素をネストして使用する際に非常に重要です。以下にその主要なポイントをまとめます：
+1. 目的
+childrenPropは、Reactコンポーネントが他の要素やコンポーネントを子として受け取るための手段です。これにより、コンポーネントは柔軟に構成され、再利用可能になります。
+2. 使用方法
+子要素は、JSX内でコンポーネントのタグの間に配置されます。
+例えば、次のように使用します：
+jsx
+const MyComponent = ({ children }) => {
+  return <div>{children}</div>;
+};
+
+// 使用例
+<MyComponent>
+  <p>Hello, World!</p>
+</MyComponent>
+
+3. 型定義
+TypeScriptを使用する場合、childrenプロパティを型定義することができます。一般的な方法は以下の通りです：
+typescript
+import { ReactNode } from 'react';
+
+type Props = {
+  children: ReactNode; // childrenが任意のReactノードを受け取る
+};
+
+const MyComponent: React.FC<Props> = ({ children }) => {
+  return <div>{children}</div>;
+};
+
+4. 特殊なケース
+複数の子要素: childrenは単一の要素だけでなく、配列やフラグメントなど複数の要素を持つこともできます。
+特定の型: 子要素が特定の型（例えば特定のコンポーネント）であることを保証したい場合、次のように型を指定できます：
+typescript
+type Props = {
+  children: ReactElement<MyChildProps>; // 特定の子要素タイプを指定
+};
+
+5. React.Children API
+ReactにはChildrenというユーティリティがあり、これを使うことで子要素を操作したり、マッピングしたりすることができます。
+例：
+javascript
+import { Children } from 'react';
+
+const MyComponent = ({ children }) => {
+  return (
+    <div>
+      {Children.map(children, child => (
+        <div className="child-wrapper">{child}</div>
+      ))}
+    </div>
+  );
+};
+
+結論
+childrenPropはReactコンポーネントの柔軟性と再利用性を高める重要な機能です。子要素を受け取ることで、コンポーネント間でデータやUI構造を簡単に共有できます。また、TypeScriptによる型定義やReact.Children APIを活用することで、安全かつ効率的に子要素を管理することが可能です。
+
+ifelsething.com
+
+github.com
+
+livebook.manning.com
+github.com
+stackoverflow.com
+もっと見る
+children
+Scrollable node or react node to be places as a sheet content.解説して
+ソース
+回答
+childrenプロパティは、Reactコンポーネントにおいて、子要素を受け取るために使用されます。特に、@gorhom/bottom-sheetライブラリのBottomSheetコンポーネントにおいては、childrenはシートの内容として表示されるノードやReactノードを指定するために利用されます。
+主なポイント
+目的:
+childrenプロパティは、BottomSheetの中に表示するコンテンツを定義します。これには、テキスト、画像、ボタン、フォームなど、任意のReact要素を含めることができます。
+型:
+childrenは、Reactノード（React.ReactNode）またはその配列を受け取ります。これは、単一の要素や複数の要素を含むことができる柔軟な型です。
+使用例:
+jsx
+import BottomSheet from '@gorhom/bottom-sheet';
+
+const MyComponent = () => {
+  return (
+    <BottomSheet
+      isOpen={true}
+      onClose={() => {}}
+    >
+      <View>
+        <Text>This is the content of the Bottom Sheet</Text>
+        <Button title="Close" onPress={() => {}} />
+      </View>
+    </BottomSheet>
+  );
+};
+
+スクロール可能なコンテンツ:
+childrenとして渡されたノードは、Sheet.Scrollerと組み合わせて使用することで、表示される内容が多い場合でもスクロール可能になります。これにより、ユーザーがすべてのコンテンツにアクセスできるようになります。
+デフォルト値:
+childrenプロパティにはデフォルト値は設定されていません。必ず何らかのReactノードを指定する必要があります。
+注意点:
+childrenとして渡すコンテンツは、BottomSheetが開いている間に動的に変更することも可能ですが、その際には状態管理を適切に行う必要があります。
+BottomSheetのサイズやスナップポイントによっては、表示されるコンテンツが制限されることがありますので、レイアウトを考慮する必要があります。
+結論
+childrenプロパティは、@gorhom/bottom-sheetライブラリでBottomSheetの内容を柔軟に定義するための重要な機能です。このプロパティを利用することで、アプリケーション内でダイナミックかつインタラクティブなUIを構築することができます。
+
+
+showwcase.com
+
+slideshare.net
+
+freecodecamp.org
+npmjs.com
+atpress.ne.jp
+もっと見る
+youtube.com
+見る
+Video Preview
+youtube.com
+見る
+Video Preview
+snapToIndexとsnapToPositionの違い
+ソース
+回答
+snaptToIndexとsnapToPositionは、@gorhom/bottom-sheetライブラリにおいてBottomSheetの位置を制御するためのメソッドですが、それぞれ異なる用途と動作を持っています。
+snapToIndex
+説明: snapToIndexは、事前に定義されたスナップポイントのインデックスを指定してBottomSheetをその位置にスナップさせるためのメソッドです。
+使用方法: このメソッドを呼び出す際には、スナップポイントのインデックスを引数として渡します。
+例:
+javascript
+bottomSheetRef.current.snapToIndex(1); // 2番目のスナップポイントにスナップ
+
+特徴:
+スナップポイントは配列で定義されており、通常は下から上に向かって配置されます。
+インデックスは0から始まるため、最初のスナップポイントはインデックス0です。
+snapToPosition
+説明: snapToPositionは、事前に定義されたスナップポイントではなく、任意のピクセルまたはパーセンテージの位置にBottomSheetをスナップさせるためのメソッドです。
+使用方法: このメソッドを呼び出す際には、スナップしたい位置（ピクセルまたはパーセンテージ）を引数として渡します。
+例:
+javascript
+bottomSheetRef.current.snapToPosition(300); // 300ピクセルの位置にスナップ
+
+特徴:
+スナップポイントが固定されていないため、より柔軟な位置指定が可能です。
+ユーザーが動的に計算した位置や、特定の条件に基づいた位置にBottomSheetを移動させる場合に便利です。
+結論
+snapToIndexは事前に設定されたスナップポイントへの移動に使用され、snapToPositionは任意の位置への移動を可能にします。これらのメソッドを適切に使い分けることで、BottomSheetの動作をより直感的かつ柔軟に制御することができます。
+
+next.nutanix.com
+
+marubeni-sys.com
+
+licensecounter.jp
+
+thinkit.co.jp
+licensecounter.jp
+ameblo.jp
+もっと見る
+useBottomSheetについて教えて
+ソース
+回答
+useBottomSheetは、@gorhom/bottom-sheetライブラリで提供されるフックで、BottomSheetの操作を簡素化するためのメソッドを提供します。このフックを使用することで、BottomSheetの状態や動作をコンポーネント内で簡単に管理できます。以下にその主要なポイントをまとめます。
+主なポイント
+目的:
+useBottomSheetは、BottomSheetのメソッド（例：スナップ、クローズ、拡張など）にアクセスするためのフックです。これにより、BottomSheetの状態管理が容易になります。
+使用方法:
+フックを呼び出すことで、BottomSheetのメソッドを取得し、コンポーネント内で利用できます。
+例えば、スナップポイントに移動したり、BottomSheetを閉じたりすることができます。
+例:
+javascript
+import React, { useRef } from 'react';
+import { Button } from 'react-native';
+import BottomSheet, { useBottomSheet } from '@gorhom/bottom-sheet';
+
+const MyComponent = () => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { snapToIndex, close } = useBottomSheet(bottomSheetRef);
+
+  return (
+    <>
+      <Button title="Open Sheet" onPress={() => snapToIndex(0)} />
+      <Button title="Close Sheet" onPress={close} />
+      <BottomSheet ref={bottomSheetRef} snapPoints={['25%', '50%']}>
+        {/* コンテンツ */}
+      </BottomSheet>
+    </>
+  );
+};
+
+提供されるメソッド:
+snapToIndex(index: number): 指定したインデックスにスナップします。
+close(): BottomSheetを閉じます。
+expand(): 最大スナップポイントにスナップします。
+collapse(): 最小スナップポイントにスナップします。
+利点:
+フックを使用することで、コンポーネント内で直接メソッドにアクセスできるため、コードがシンプルになり、可読性が向上します。
+状態管理が容易になり、ユーザーインターフェースの反応性が向上します。
+注意点:
+useBottomSheetは、BottomSheetコンポーネントと一緒に使用する必要があります。フックはコンポーネント内でのみ有効です。
+結論
+useBottomSheetフックは、@gorhom/bottom-sheetライブラリの強力な機能であり、BottomSheetの操作を簡素化し、状態管理を容易にします。このフックを利用することで、React Nativeアプリケーション内で直感的かつ効果的なユーザーインターフェースを構築することが可能になります。
+
+github.com
+
+huddle01.hashnode.dev
+
+note.com
+blog.mathpresso.com
+github.com
+もっと見る
+BottomSheetFlatList
+BottomSheetSectionList
+BottomSheetScrollView
+BottomSheetVirtualizedList
+BottomSheetViewそれぞれ解説して
+ソース
+回答
+以下は、@gorhom/bottom-sheetライブラリに含まれる各コンポーネントについての解説です。これらのコンポーネントは、BottomSheetの中でスクロール可能なコンテンツを表示するために使用されます。
+1. BottomSheetFlatList
+説明: BottomSheetFlatListは、React NativeのFlatListをラップしたコンポーネントで、BottomSheet内でリストデータを表示するために使用されます。スクロール可能なリストを提供し、パフォーマンスが最適化されています。
+用途: 大量のデータを効率的に表示する必要がある場合に最適です。リストアイテムは遅延読み込みされるため、パフォーマンスが向上します。
+2. BottomSheetSectionList
+説明: BottomSheetSectionListは、React NativeのSectionListをラップしたコンポーネントです。セクション分けされたリストデータをBottomSheet内で表示できます。
+用途: データがセクションごとに整理されている場合（例えば、カテゴリ別のアイテムなど）に使用します。各セクションにはヘッダーを設定でき、視覚的に整理されたリストを提供します。
+3. BottomSheetScrollView
+説明: BottomSheetScrollViewは、React NativeのScrollViewをラップしたコンポーネントで、BottomSheet内でスクロール可能なコンテンツを表示するために使用されます。
+特徴: スクロールイベントがBottomSheetのジェスチャーと統合されており、スムーズなユーザー体験を提供します。このコンポーネントは、単純なコンテンツや動的に生成された要素を含む場合に便利です。
+4. BottomSheetVirtualizedList
+説明: BottomSheetVirtualizedListは、React NativeのVirtualizedListをラップしたコンポーネントです。大量のデータを効率的に表示できるように設計されています。
+用途: 非常に大きなリストデータセット（数千以上のアイテム）を扱う場合に最適です。仮想化によって必要なアイテムのみがレンダリングされるため、高いパフォーマンスが実現されます。
+5. BottomSheetView
+説明: BottomSheetViewは、単なるビューコンテナとして機能し、任意のReactノードやカスタムコンテンツを含めることができます。
+用途: スクロール可能ではない静的なコンテンツやカスタムUI要素をBottomSheet内に配置する際に使用します。このコンポーネントは他のスクロール可能なコンポーネントと組み合わせて使用することもできます。
+結論
+これらのコンポーネントは、それぞれ異なるデータ表示ニーズに応じて設計されています。FlatListやSectionListなどの標準的なリスト表示機能を持つ一方で、特定の要件（大量データやセクション分けなど）にも対応できるようになっています。アプリケーションの要件に応じて適切なコンポーネントを選択し、効果的なユーザーインターフェースを構築することが重要です。
+関連
+BottomSheetFlatListとBottomSheetSectionListの違いは
+BottomSheetScrollViewとBottomSheetVirtualizedListの使い分けは
+BottomSheetScrollViewの特徴と利点は
+BottomSheetVirtualizedListのパフォーマンスはどうなっているの
+BottomSheetSectionListの使い方の例を教えて
+
+github.com
+
+github.com
+
+github.com
+
+github.com
+もっと見る
+BottomSheetScrollViewの特徴と利点は
+ソース
+回答
+BottomSheetScrollViewは、@gorhom/bottom-sheetライブラリで提供されるコンポーネントで、React NativeのScrollViewをベースにしたもので、BottomSheet内でスクロール可能なコンテンツを表示するために特化しています。以下にその特徴と利点を詳しく解説します。
+特徴
+統合されたジェスチャー:
+BottomSheetScrollViewは、BottomSheetのスワイプジェスチャーと統合されています。これにより、ユーザーがBottomSheetを上下にスワイプする際に、スクロール操作が自然に行えます。
+React NativeのScrollViewの機能:
+標準のScrollViewの機能を持ち、縦方向または横方向のスクロールが可能です。これにより、リストやコンテンツが画面領域を超える場合でも、ユーザーは簡単にアクセスできます。
+カスタマイズ可能なスタイル:
+contentContainerStyleプロパティを使用して、内部コンテンツのスタイルをカスタマイズできます。これにより、デザイン要件に合わせたレイアウトが可能です。
+focusHookサポート:
+複数のスクロール可能なコンポーネントと連携する場合、focusHookプロパティを使用して現在のスクロール可能コンポーネントを検出できます。特にReact Navigationと組み合わせて使用する際に便利です。
+パフォーマンス最適化:
+スクロール中のパフォーマンスが最適化されており、大量のコンテンツを扱う場合でもスムーズな操作が実現されています。
+利点
+ユーザーエクスペリエンスの向上:
+BottomSheet内でスクロール可能なコンテンツを提供することで、ユーザーは必要な情報やアクションに迅速にアクセスできるようになります。これにより、アプリケーションの使いやすさが向上します。
+シンプルな実装:
+BottomSheetScrollViewを使用することで、複雑なジェスチャー管理やスクロール処理を自分で実装する必要がなくなり、開発時間が短縮されます。
+柔軟性:
+スクロール可能なコンテンツとして任意のReactノードを使用できるため、リストやフォームなど多様なUI要素を簡単に組み込むことができます。
+統一感のあるデザイン:
+BottomSheetとスクロールビューが統合されているため、一貫したデザインとインタラクション体験を提供できます。
+メンテナンス性:
+ライブラリによって提供されるコンポーネントを使用することで、自前で複雑なロジックを書く必要がなくなり、コードベースのメンテナンス性が向上します。
+結論
+BottomSheetScrollViewは、@gorhom/bottom-sheetライブラリ内で非常に便利で強力なコンポーネントです。ユーザーエクスペリエンスを向上させつつ、開発者にも使いやすいインターフェースを提供するため、多くのReact Nativeアプリケーションで活用されています。

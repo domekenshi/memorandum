@@ -1,0 +1,21 @@
+ジオフェンスのエンターやエグジットイベントを検知した際にサイレントプッシュ通知を送るには、サーバーサイドの実装が必要になる場合があります。ただし、ローカル通知を使用してデバイス上で直接ユーザーに情報を提供することも可能です。以下は、ローカル通知を送信する例です。
+
+java
+Copy code
+private void sendNotification(Context context, String message) {
+    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationChannel channel = new NotificationChannel("channel_id", "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle("Geofence Alert")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+    notificationManager.notify(1, builder.build());
+}
+このメソッドをGeofenceBroadcastReceiverのonReceiveメソッド内で呼び出して、ジオフェンスイベントに応じた通知をユーザーに表示します。

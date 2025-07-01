@@ -1,0 +1,11 @@
+ジオフェンスイベント（エンター、エグジット）を受信するBroadcastReceiverを作成します。このBroadcastReceiverはジオフェンスイベントを検知してサイレントプッシュ通知を送信する責務があります。
+
+java
+Copy code
+public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        // ここでジオフェンスイベントを処理
+        // サイレントプッシュ通知を送る
+    }
+}
